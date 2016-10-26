@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - @localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+    <schema id="1" name="admin"/>
+    <schema id="2" name="easyim"/>
+    <schema id="3" name="gogs"/>
+    <schema id="4" name="information_schema"/>
+    <schema id="5" name="IPPDemo"/>
+    <schema id="6" name="moment"/>
+    <schema id="7" name="mysql"/>
+    <schema id="8" name="performance_schema"/>
+    <schema id="9" name="sys"/>
+    <schema id="10" name="fish">
+      <visible>1</visible>
+    </schema>
+    <table id="11" parent="10" name="user"/>
+    <column id="12" parent="11" name="id">
+      <mandatory>1</mandatory>
+      <data-type>bigint(20)|0</data-type>
+    </column>
+    <column id="13" parent="11" name="user_name">
+      <mandatory>1</mandatory>
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="14" parent="11" name="password">
+      <mandatory>1</mandatory>
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="15" parent="11" name="nama">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="16" parent="11" name="nike_name">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="17" parent="11" name="dateBirth">
+      <data-type>datetime|0</data-type>
+    </column>
+    <column id="18" parent="11" name="email">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="19" parent="11" name="phone">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="20" parent="11" name="registerIP">
+      <mandatory>1</mandatory>
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="21" parent="11" name="registerDate">
+      <mandatory>1</mandatory>
+      <data-type>datetime|0</data-type>
+    </column>
+  </database-model>
+</dataSource>
