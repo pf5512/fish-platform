@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.apiversion;
+package com.ippteam.fish.util.api.version;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

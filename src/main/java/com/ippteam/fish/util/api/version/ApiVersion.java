@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.apiversion;
+package com.ippteam.fish.util.api.version;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

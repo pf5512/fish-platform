@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.apiversion;
+package com.ippteam.fish.util.api.version;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

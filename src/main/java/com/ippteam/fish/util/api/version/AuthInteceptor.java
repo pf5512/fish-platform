@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.apiversion;
+package com.ippteam.fish.util.api.version;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

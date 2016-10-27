@@ -2,47 +2,28 @@ package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.service.IUserService;
+import com.ippteam.fish.util.api.entity.Result;
+import com.ippteam.fish.util.api.exception.InvalidRequest;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import jdk.nashorn.internal.ir.ReturnNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.ippteam.fish.util.apiversion.*;
+import com.ippteam.fish.util.api.version.*;
 
 /**
  * Created by pactera on 16/10/24.
  */
 
-@RestController
-@RequestMapping("/{version}")
-public class UserController {
-    @Autowired
-    private IUserService userService;
+@Controller
+@RequestMapping("/api/{version}/user")
+public class UserController extends BaseController {
 
     @ApiVersion(1)
     @ResponseBody
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public User user(@PathVariable("id") Integer id) {
-        return userService.getUserById(id);
-    }
-
-    @ApiVersion(1)
-    @ResponseBody
-    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public boolean login(@RequestBody User user) {
-        if (userService.login(user.getUserName(), user.getPassword())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @ApiVersion(1)
-    @ResponseBody
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    public boolean register(@RequestBody User user) {
-        if (userService.register(user)) {
-            return true;
-        } else {
-            return false;
-        }
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Result user(@PathVariable(value = "id") Integer id) {
+        User u = userService.getUserById(id);
+        return new Result(200, null, u);
     }
 }
