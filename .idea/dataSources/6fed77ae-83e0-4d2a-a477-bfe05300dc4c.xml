@@ -13,41 +13,57 @@
     <schema id="10" name="fish">
       <visible>1</visible>
     </schema>
-    <table id="11" parent="10" name="user"/>
-    <column id="12" parent="11" name="id">
+    <schema id="11" name="test"/>
+    <table id="12" parent="10" name="user"/>
+    <table id="13" parent="10" name="developer"/>
+    <column id="14" parent="12" name="id">
       <mandatory>1</mandatory>
-      <data-type>bigint(20)|0</data-type>
+      <data-type>int(20)|0</data-type>
+      <sequence-identity>1</sequence-identity>
     </column>
-    <column id="13" parent="11" name="user_name">
+    <column id="15" parent="12" name="user_name">
       <mandatory>1</mandatory>
-      <data-type>varchar(255)|0</data-type>
+      <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="14" parent="11" name="password">
+    <column id="16" parent="12" name="password">
       <mandatory>1</mandatory>
-      <data-type>varchar(255)|0</data-type>
+      <data-type>varchar(16)|0</data-type>
     </column>
-    <column id="15" parent="11" name="nama">
-      <data-type>varchar(255)|0</data-type>
+    <column id="17" parent="12" name="full_name">
+      <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="16" parent="11" name="nike_name">
-      <data-type>varchar(255)|0</data-type>
+    <column id="18" parent="12" name="nike_name">
+      <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="17" parent="11" name="dateBirth">
-      <data-type>datetime|0</data-type>
+    <column id="19" parent="12" name="birthdate">
+      <data-type>date|0</data-type>
     </column>
-    <column id="18" parent="11" name="email">
-      <data-type>varchar(255)|0</data-type>
+    <column id="20" parent="12" name="email">
+      <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="19" parent="11" name="phone">
-      <data-type>varchar(255)|0</data-type>
+    <column id="21" parent="12" name="phone">
+      <data-type>varchar(11)|0</data-type>
     </column>
-    <column id="20" parent="11" name="registerIP">
+    <column id="22" parent="12" name="register_ip">
       <mandatory>1</mandatory>
-      <data-type>varchar(255)|0</data-type>
+      <data-type>varchar(15)|0</data-type>
     </column>
-    <column id="21" parent="11" name="registerDate">
+    <column id="23" parent="12" name="register_date">
       <mandatory>1</mandatory>
-      <data-type>datetime|0</data-type>
+      <data-type>date|0</data-type>
+    </column>
+    <key id="24" parent="12" name="PRIMARY">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+    <column id="25" parent="13" name="id">
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="26" parent="13" name="app_key">
+      <data-type>varchar(8)|0</data-type>
+    </column>
+    <column id="27" parent="13" name="security_key">
+      <data-type>varchar(32)|0</data-type>
     </column>
   </database-model>
 </dataSource>
