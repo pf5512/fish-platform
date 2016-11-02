@@ -1,16 +1,13 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.entity.User;
 import com.ippteam.fish.util.api.entity.*;
 import com.ippteam.fish.util.api.exception.InvalidRequest;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by pactera on 16/10/26.

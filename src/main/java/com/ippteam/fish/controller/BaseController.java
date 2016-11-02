@@ -1,6 +1,6 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.service.IUserService;
+import com.ippteam.fish.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Controller;
 
 public class BaseController {
     @Autowired
-    protected IUserService userService;
+    protected UserService userService;
 }

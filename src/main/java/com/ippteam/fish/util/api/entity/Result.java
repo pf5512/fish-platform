@@ -2,6 +2,7 @@ package com.ippteam.fish.util.api.entity;
 
 /**
  * Created by pactera on 16/10/26.
+ * 接口返回
  */
 public class Result {
     Integer code;
