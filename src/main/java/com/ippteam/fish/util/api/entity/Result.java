@@ -6,12 +6,12 @@ package com.ippteam.fish.util.api.entity;
  */
 public class Result {
     Integer code;
-    String des;
+    String reason;
     Object data;
 
     public Result(Integer code, String des, Object data) {
         this.code = code;
-        this.des = des;
+        this.reason = des;
         this.data = data;
     }
 
@@ -20,8 +20,8 @@ public class Result {
         return code;
     }
 
-    public String getDes() {
-        return des;
+    public String getReason() {
+        return reason;
     }
 
     public Object getData() {
