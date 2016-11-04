@@ -4,6 +4,7 @@ import com.ippteam.fish.entity.User;
 import com.ippteam.fish.entity.UserExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 @Repository("UserDao")
 public interface UserMapper {
