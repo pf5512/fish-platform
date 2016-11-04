@@ -1,5 +1,0 @@
-com/ippteam/fish/entity/User.class
-com/ippteam/fish/service/IUserService.class
-com/ippteam/fish/controller/UserController.class
-com/ippteam/fish/dao/IUserDao.class
-com/ippteam/fish/service/UserServiceImpl.class
