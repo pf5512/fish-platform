@@ -16,7 +16,7 @@ public interface UserService {
 
     User getUserByPhone(String phone);
 
-    boolean login(String userName, String pwd);
+    boolean login(String account, String pwd);
 
     boolean registerByEmail(String email, String password);
 

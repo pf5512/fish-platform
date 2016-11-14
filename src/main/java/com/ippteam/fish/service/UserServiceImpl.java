@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
         return users.get(0);
     }
 
-    public boolean login(String userName, String pwd) {
+    public boolean login(String account, String pwd) {
         UserExample userExample = new UserExample();
-        userExample.or().andUserNameEqualTo(userName);
+        userExample.or().andUserNameEqualTo(account);
 
         List<User> users = userDao.selectByExample(userExample);
         if (users.size() > 0) {
