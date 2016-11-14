@@ -22,15 +22,8 @@ public class Final {
     // 登陆凭证
     public static final String KEY_CREDENTIAL = "credential";
 
-
-    // 业务异常Business exception
-    public static final String BUSINESS_EXCEPTION_USERNAME_OR_PASSWORD_INVALID = "username or password is invalid";
-    public static final String BUSINESS_EXCEPTION_PARAM_INVALID = "invalid body param";
-    public static final String BUSINESS_EXCEPTION_USERNAME_EXISTING = "username is existing";
-    public static final String BUSINESS_EXCEPTION_EMAIL_EXISTING = "email is existing";
-    public static final String BUSINESS_EXCEPTION_PHONE_EXISTING = "phone is existing";
-
-    public static final String UNKNOWN_ERROR = "unknown error";
     // 非业务异常
+    public static final String EXCEPTION_PARAM_INVALID = "invalid body param";
+    public static final String SIGN_FAIL = "sign fail";
 
 }
