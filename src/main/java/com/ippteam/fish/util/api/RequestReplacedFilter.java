@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by isunimp on 16/11/3.
  */
-public class HttpServletRequestReplacedFilter implements Filter {
+public class RequestReplacedFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {
         //Do nothing
@@ -16,7 +16,7 @@ public class HttpServletRequestReplacedFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ServletRequest requestWrapper = null;
         if (request instanceof HttpServletRequest) {
-            requestWrapper = new BodyReaderHttpServletRequestWrapper((HttpServletRequest) request);
+            requestWrapper = new BodyReaderWrapper((HttpServletRequest) request);
         }
         if (null == requestWrapper) {
             chain.doFilter(request, response);

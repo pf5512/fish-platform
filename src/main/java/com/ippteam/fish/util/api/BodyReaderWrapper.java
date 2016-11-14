@@ -13,13 +13,16 @@ import jodd.JoddDefault;
 import jodd.io.StreamUtil;
 
 /**
+ *
+ * 封装HttpServletRequest，
+ *
  * Created by isunimp on 16/11/3.
  */
-public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
+public class BodyReaderWrapper extends HttpServletRequestWrapper {
 
     private final byte[] body;
 
-    public BodyReaderHttpServletRequestWrapper(HttpServletRequest request)
+    public BodyReaderWrapper(HttpServletRequest request)
             throws IOException {
         super(request);
         body = StreamUtil.readBytes(request.getReader(), JoddDefault.encoding);
