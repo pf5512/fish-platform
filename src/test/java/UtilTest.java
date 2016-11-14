@@ -1,7 +1,4 @@
-import com.ippteam.fish.util.AES;
-import com.ippteam.fish.util.ConvertByte;
-import com.ippteam.fish.util.HTTP;
-import com.ippteam.fish.util.JSON;
+import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.api.entity.Sign;
 import org.junit.Test;
 
@@ -61,15 +58,22 @@ public class UtilTest {
     }
 
     @Test
+    public void testRegex(){
+        boolean b = Verify.phone("18090910728");
+        System.out.print(b);
+    }
+
+
+    @Test
     public void sign() {
         String securityKey = "0e5b78c1ff6f4ed4a169fea3d3eda528";
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        // 时间戳
+        /* 时间戳 */
         sb.append("\"expiredTime\":");
         sb.append("\"" + System.currentTimeMillis() + "\"");
         sb.append(",");
-        // body
+        /* body */
         sb.append("\"body\":");
         StringBuilder loginBody = new StringBuilder();
         loginBody.append("{");

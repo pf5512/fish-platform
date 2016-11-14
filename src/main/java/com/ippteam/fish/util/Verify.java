@@ -4,6 +4,8 @@ import java.awt.image.SampleModel;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by pactera on 16/10/31.
@@ -37,11 +39,32 @@ public class Verify {
         }
     }
 
-    public static boolean isValid(String string) {
+    public static boolean string(String string) {
         return string != null && string.length() > 0 ? true : false;
     }
 
-    public static boolean isValid(byte[] buff) {
+    public static boolean userName(String userName) {
+        String regExp = "^[a-zA-Z]\\w{5,17}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(userName);
+        return m.matches();
+    }
+
+    public static boolean buffer(byte[] buff) {
         return buff != null && buff.length > 0 ? true : false;
+    }
+
+    public static boolean email(String email) {
+        String regExp = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(email);
+        return m.matches();
+    }
+
+    public static boolean phone(String phone) {
+        String regExp = "^((13[0-9])|(15[^4])|(18[^4])|(17[0-8])|(147))\\d{8}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(phone);
+        return m.matches();
     }
 }
