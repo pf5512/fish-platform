@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Created by pactera on 16/10/27.
  */
 
-public class InvalidRequest extends RuntimeException {
-    public InvalidRequest(String message) {
+public class ParameterException extends RuntimeException {
+    public ParameterException(String message) {
         super(message);
     }
 }
