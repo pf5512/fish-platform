@@ -23,7 +23,9 @@ public class Final {
     public static final String KEY_CREDENTIAL = "credential";
 
     // 非业务异常
-    public static final String EXCEPTION_PARAM_INVALID = "invalid body param";
-    public static final String SIGN_FAIL = "sign fail";
-
+    public static final String EXCEPTION_REQUEST_BODY_PARAM_MISSING = "required request body is missing.";
+    public static final String EXCEPTION_REQUEST_BODY_PARAM_INVALID = "required request body is invalid.";
+    public static final String EXCEPTION_REQUEST_METHOD_NOTSUPPORTED = "Request method not supported or Request not found.";
+    public static final String EXCEPTION_UNKNOWN_EXCEPTION = "unknown exception.";
+    public static final String EXCEPTION_SIGN_FAIL = "sign fail.";
 }

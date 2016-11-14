@@ -5,6 +5,7 @@ import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.api.entity.Credential;
 import com.ippteam.fish.util.api.entity.Result;
 import com.ippteam.fish.util.api.entity.Sign;
+import com.ippteam.fish.util.api.exception.CertificationException;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.log4j.Logger;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpSession;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+
+import static com.ippteam.fish.util.Final.*;
+import static com.ippteam.fish.util.FinalDebug.*;
 
 /**
  * Created by pactera on 16/10/28.
@@ -41,50 +45,47 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
         String appkey = request.getParameter("appkey");
         String signEncrypt = request.getParameter("sign");
 
-        if (!Verify.isValid(appkey) || !Verify.isValid(signEncrypt)) {
-            this.writerData(response);
-            return false;
+        if (!Verify.string(appkey) || !Verify.string(signEncrypt)) {
+            logger.debug(SIGN_FAIL_APPKEY_OR_SIGN_NULL);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         String securityKey = developerService.getSecurityKeyByAppkey(appkey);
-        if (!Verify.isValid(securityKey)) {
-            this.writerData(response);
-            return false;
+        if (!Verify.string(securityKey)) {
+            logger.debug(SIGN_FAIL_APPKEY_INVALID);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 加密过的
         byte[] encryptedBuff = ConvertByte.parseHexStr2Byte(signEncrypt);
-        if (!Verify.isValid(encryptedBuff)) {
-            this.writerData(response);
-            return false;
+        if (!Verify.buffer(encryptedBuff)) {
+            logger.debug(SIGN_FAIL_SIGN_INVALID);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 原文buff
         byte[] decryptedBuff = AES.decrypt(encryptedBuff, securityKey);
-        if (!Verify.isValid(decryptedBuff)) {
-            this.writerData(response);
-            return false;
+        if (!Verify.buffer(decryptedBuff)) {
+            logger.debug(SIGN_FAIL_SIGN_INVALID);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         String signDecrypt = new String(decryptedBuff);
         Sign sign = JSON.parse(signDecrypt, Sign.class);
+        logger.info(signDecrypt);
 
         if (!verifyExpiredTime(sign.getExpiredTime())) {
-            logger.debug("expiredTime验证失败");
-            this.writerData(response);
-            return false;
+            logger.debug(SIGN_FAIL_TIMEOUT);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         if (!verifyBody(request, sign.getBody())) {
-            logger.debug("body验证失败");
-            this.writerData(response);
-            return false;
+            logger.debug(SIGN_FAIL_BODY_ERROR);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         if (!verifyToken(request, sign.getToken())) {
-            logger.debug("token验证失败");
-            this.writerData(response);
-            return false;
+            logger.debug(SIGN_FAIL_TOKEN_INVALID);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-
         return true;
     }
 
@@ -109,8 +110,6 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean verifyExpiredTime(long requestExpiredTime) {
         long currentExpiredTime = System.currentTimeMillis();
-        logger.debug("current:" + currentExpiredTime);
-        logger.debug("request:" + requestExpiredTime);
         return (requestExpiredTime > currentExpiredTime ||
                 currentExpiredTime - requestExpiredTime > 30000) ? false : true;
     }
