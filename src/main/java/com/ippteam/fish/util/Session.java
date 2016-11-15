@@ -5,6 +5,7 @@ import com.ippteam.fish.util.api.entity.Credential;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 /**
  * Created by isunimp on 16/11/15.
@@ -13,7 +14,7 @@ public class Session {
 
     public static Credential login(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
-        Credential credential = new Credential();
+        Credential credential = new Credential(user.getId());
         session.setAttribute(Final.KEY_CREDENTIAL, credential);
         return credential;
     }

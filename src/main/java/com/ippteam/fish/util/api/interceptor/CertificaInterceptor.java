@@ -163,9 +163,7 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
                 return true;
             }
         }
-
-        HttpSession session = request.getSession();
-        Credential credential = (Credential) session.getAttribute(Final.KEY_CREDENTIAL);
+        Credential credential = Session.demand(request);
         if (credential == null) {
             return false;
         } else {
