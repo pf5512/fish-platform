@@ -5,8 +5,11 @@ package com.ippteam.fish.util.api.entity;
  * 接口返回
  */
 public class Result {
+    // 业务状态码(0代表没有异常)
     Integer code;
+    // 异常原因
     String reason;
+    // 业务数据
     Object data;
 
     public Result(Integer code, String des, Object data) {

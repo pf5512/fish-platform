@@ -2,8 +2,6 @@ package com.ippteam.fish.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Stack;
-
 /**
  * Created by pactera on 16/11/1.
  */
