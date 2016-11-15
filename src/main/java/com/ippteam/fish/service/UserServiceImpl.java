@@ -1,19 +1,20 @@
 package com.ippteam.fish.service;
 
+import com.ippteam.fish.controller.UserController;
 import com.ippteam.fish.dao.UserMapper;
 import com.ippteam.fish.entity.*;
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.util.api.exception.ParameterException;
 import org.apache.catalina.*;
 import org.apache.commons.codec.language.bm.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.EmbeddedValueResolver;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
-import static com.ippteam.fish.util.Final.REG_WAY_EMAIL;
-import static com.ippteam.fish.util.Final.REG_WAY_PHONE;
-import static com.ippteam.fish.util.Final.REG_WAY_USERNAME;
+import static com.ippteam.fish.util.Final.*;
 
 
 /**
@@ -55,77 +56,53 @@ public class UserServiceImpl implements UserService {
         return users.get(0);
     }
 
-    public boolean login(String account, String pwd) {
+    public User getUserByAccount(String account) {
         UserExample userExample = new UserExample();
         userExample.or().andUserNameEqualTo(account);
+        userExample.or().andPhoneEqualTo(account);
+        userExample.or().andEmailEqualTo(account);
 
         List<User> users = userDao.selectByExample(userExample);
-        if (users.size() > 0) {
-            User user = users.get(0);
-            if (user != null && user.getPassword().equals(pwd)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
+        return users.get(0);
     }
 
-
-    public boolean registerByEmail(String email, String password) {
-        Date curDate = new Date();
-
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setCreateTime(curDate);
-        user.setUpdateTime(curDate);
-        user.setRegisterTime(curDate);
-        user.setRegisterWay(REG_WAY_EMAIL);
-//        user.setRegisterIp();
-
-        if (userDao.insert(user) == 1) {
-            return true;
-        } else {
-            return false;
+    public User login(String account, String pwd) {
+        User user = this.getUserByAccount(account);
+        if (user == null || !user.getPassword().equals(pwd)) {
+            return null;
         }
+        return user;
     }
 
-    public boolean registerByPhone(String phone, String password) {
-        Date curDate = new Date();
+    public User register(User user) {
+        String account;
+        String regWay = user.getRegisterWay();
 
-        User user = new User();
-        user.setPhone(phone);
-        user.setPassword(password);
-        user.setCreateTime(curDate);
-        user.setUpdateTime(curDate);
-        user.setRegisterTime(curDate);
-        user.setRegisterWay(REG_WAY_PHONE);
-//        user.setRegisterIp();
-
-        if (userDao.insert(user) == 1) {
-            return true;
+        if (REG_WAY_USERNAME.equals(regWay)) {
+            account = user.getUserName();
+            user.setEmail(null);
+            user.setPhone(null);
+        } else if (REG_WAY_EMAIL.equals(regWay)) {
+            account = user.getEmail();
+            user.setUserName(null);
+            user.setPhone(null);
+        } else if (REG_WAY_PHONE.equals(regWay)) {
+            account = user.getPhone();
+            user.setUserName(null);
+            user.setEmail(null);
         } else {
-            return false;
+            throw new ParameterException(EXCEPTION_REQUEST_BODY_PARAM_INVALID);
         }
-    }
 
-    public boolean registerByUserName(String userName, String password) {
-        Date curDate = new Date();
-
-        User user = new User();
-        user.setUserName(userName);
-        user.setPassword(password);
-        user.setCreateTime(curDate);
-        user.setUpdateTime(curDate);
-        user.setRegisterTime(curDate);
-        user.setRegisterWay(REG_WAY_USERNAME);
-//        user.setRegisterIp();
-
-        if (userDao.insert(user) == 1) {
-            return true;
-        } else {
-            return false;
+        // 验证是否已经被注册
+        if (this.getUserByAccount(account) != null) {
+            return null;
         }
+
+        int row = userDao.insert(user);
+        if (row <= 0) {
+            return null;
+        }
+        return this.getUserByAccount(account);
     }
 }
