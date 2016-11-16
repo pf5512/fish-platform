@@ -6,8 +6,6 @@ import com.ippteam.fish.util.api.entity.Credential;
 import com.ippteam.fish.util.api.entity.Result;
 import com.ippteam.fish.util.api.entity.Sign;
 import com.ippteam.fish.util.api.exception.CertificationException;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import org.apache.commons.logging.impl.Log4JLogger;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,10 +13,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static com.ippteam.fish.util.Final.*;
 import static com.ippteam.fish.util.FinalDebug.*;
@@ -124,13 +123,24 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean verifyBody(HttpServletRequest request, Object body) throws Exception {
         BufferedReader br = request.getReader();
-        String line, bodyString = "";
+        String line = null;
+        StringBuilder sb = new StringBuilder();
         while ((line = br.readLine()) != null) {
-            bodyString += line;
+            sb.append(line);
         }
         br.close();
-        String temp = JSON.stringify(body);
-        return temp.trim().equals(bodyString.trim()) ? true : false;
+
+        Object body2 = null;
+        if (body instanceof String) {
+            body2 = sb.toString();
+        } else if (body instanceof Map) {
+            body2 = JSON.parse(sb.toString(), Map.class);
+        } else if (body instanceof List) {
+            body2 = JSON.parse(sb.toString(), List.class);
+        } else if (body.getClass().isArray()) {
+            body2 = JSON.parse(sb.toString(), List.class);
+        }
+        return Verify.equals(body, body2);
     }
 
     /**
