@@ -4,14 +4,11 @@ import com.ippteam.fish.controller.UserController;
 import com.ippteam.fish.dao.UserMapper;
 import com.ippteam.fish.entity.*;
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.util.Fix;
 import com.ippteam.fish.util.api.exception.ParameterException;
-import org.apache.catalina.*;
-import org.apache.commons.codec.language.bm.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.EmbeddedValueResolver;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 import static com.ippteam.fish.util.Final.*;
@@ -37,7 +34,7 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andUserNameEqualTo(userName);
 
         List<User> users = userDao.selectByExample(userExample);
-        return users.get(0);
+        return Fix.list(users, 0);
     }
 
     public User getUserByEmail(String email) {
@@ -45,7 +42,7 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andEmailEqualTo(email);
 
         List<User> users = userDao.selectByExample(userExample);
-        return users.get(0);
+        return Fix.list(users, 0);
     }
 
     public User getUserByPhone(String phone) {
@@ -53,7 +50,7 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andPhoneEqualTo(phone);
 
         List<User> users = userDao.selectByExample(userExample);
-        return users.get(0);
+        return Fix.list(users, 0);
     }
 
     public User getUserByAccount(String account) {
@@ -63,7 +60,7 @@ public class UserServiceImpl implements UserService {
         userExample.or().andEmailEqualTo(account);
 
         List<User> users = userDao.selectByExample(userExample);
-        return users.get(0);
+        return Fix.list(users, 0);
     }
 
     public User login(String account, String pwd) {
