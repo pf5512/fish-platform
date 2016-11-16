@@ -25,7 +25,7 @@ public class AdviceController {
     private static Logger logger = Logger.getLogger(AdviceController.class);
 
     @ExceptionHandler(BusinessException.class)
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Result businessException(BusinessException e) {
         return new Result(e.getCode(), e.getReason(), null);
@@ -46,10 +46,10 @@ public class AdviceController {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
     public Result httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return new Result(400, EXCEPTION_REQUEST_BODY_PARAM_MISSING, null);
+        return new Result(400, EXCEPTION_REQUEST_BODY_PARAM_INVALID, null);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

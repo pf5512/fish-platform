@@ -27,7 +27,8 @@ public class BusinessException extends RuntimeException {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public BusinessException setReason(String reason) {
         this.reason = reason;
+        return this;
     }
 }
