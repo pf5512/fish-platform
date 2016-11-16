@@ -71,12 +71,11 @@ public class FrameworkTest {
         }
     }
 
-
     @Test
     public void UserServiceSelect() {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         UserServiceImpl userService = (UserServiceImpl) context.getBean("UserService");
-        if (userService.login("ansheck", "123456")) {
+        if (userService.login("ansheck", "123456") != null) {
             System.out.println("login suss");
         } else {
             System.out.println("login fail");
@@ -93,11 +92,12 @@ public class FrameworkTest {
             user.setPassword("123456");
             user.setRegisterTime(new Date());
             user.setRegisterIp(127001);
-//            if (userService.register(user)) {
-//                System.out.println("insert suss.");
-//            } else {
-//                System.out.println("insert fail.");
-//            }
+            User ruser = userService.register(user);
+            if (ruser != null) {
+                System.out.println("insert suss." + "id=" + ruser.getId());
+            } else {
+                System.out.println("insert fail.");
+            }
         }
     }
 
@@ -121,7 +121,5 @@ public class FrameworkTest {
         List<Developer> developers = developerDao.selectByExample(developerExample);
         Developer developer = developers.get(0);
         System.out.println(developers.size());
-
-
     }
 }
