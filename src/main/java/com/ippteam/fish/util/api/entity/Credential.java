@@ -1,6 +1,6 @@
 package com.ippteam.fish.util.api.entity;
 
-import com.ippteam.fish.util.UUID;
+import com.ippteam.fish.util.Random;
 
 /**
  * Created by pactera on 16/10/28.
@@ -12,7 +12,7 @@ public class Credential {
 
     public Credential(Integer userId) {
         this.userId = userId.toString();
-        this.token = UUID.UUIDTrim();
+        this.token = Random._32String();
     }
 
     public Boolean isValid() {

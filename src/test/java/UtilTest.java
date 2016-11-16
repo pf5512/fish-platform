@@ -78,14 +78,14 @@ public class UtilTest {
         map1.put(4, "1");
         map1.put(1, "");
         map1.put(2, "2");
-        map1.put(10,list1);
+        map1.put(10, list1);
 
         Map map2 = new HashMap<String, Object>();
         map2.put(2, "2");
         map2.put(1, null);
         map2.put(3, "1");
         map2.put(4, "1");
-        map2.put(10,list2);
+        map2.put(10, list2);
 
         Object obj1 = map1;
         Object obj2 = map2;
@@ -94,7 +94,7 @@ public class UtilTest {
     }
 
     @Test
-    public void testHTTP() {
+    public void HTTP() {
         try {
             Map param = new HashMap();
             param.put("sa", "sa");
@@ -109,6 +109,13 @@ public class UtilTest {
     public void testRegex() {
         boolean b = Verify.phone("18090910728");
         System.out.print(b);
+    }
+
+    @Test
+    public void random() {
+        System.out.println(Random.UUIDString());
+        System.out.println(Random._32String().length());
+        System.out.println(Random.UUIDString().length());
     }
 
     @Test
@@ -132,5 +139,10 @@ public class UtilTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void test(){
+        System.out.println(Random._6Number());
     }
 }

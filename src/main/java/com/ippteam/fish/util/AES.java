@@ -14,7 +14,7 @@ import java.util.UUID;
 public class AES {
 
     public static String newSecretKey() {
-        return com.ippteam.fish.util.UUID.UUIDTrim();
+        return com.ippteam.fish.util.Random._32String();
     }
 
     /**
