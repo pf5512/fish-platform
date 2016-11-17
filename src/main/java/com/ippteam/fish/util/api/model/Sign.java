@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.api.entity;
+package com.ippteam.fish.util.api.model;
 
 /**
  * Created by pactera on 16/10/31.

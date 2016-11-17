@@ -1,8 +1,7 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.util.api.entity.*;
+import com.ippteam.fish.util.api.model.*;
 import com.ippteam.fish.util.api.exception.*;
-import com.ippteam.fish.util.api.interceptor.CertificaInterceptor;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import sun.management.snmp.jvmmib.JvmThreadInstanceTableMeta;
 
 import static com.ippteam.fish.util.Final.*;
 

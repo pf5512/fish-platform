@@ -2,18 +2,16 @@ package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.model.RegNew;
-import com.ippteam.fish.model.RegisterWay;
 import com.ippteam.fish.util.Session;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
-import com.ippteam.fish.util.api.entity.Credential;
-import com.ippteam.fish.util.api.entity.Result;
+import com.ippteam.fish.util.api.model.Credential;
+import com.ippteam.fish.util.api.model.Result;
 import com.ippteam.fish.util.api.exception.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ippteam.fish.util.api.version.*;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.ippteam.fish.util.Final.*;

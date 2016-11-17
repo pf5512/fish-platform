@@ -1,11 +1,10 @@
 package com.ippteam.fish.util;
 
 import com.ippteam.fish.entity.User;
-import com.ippteam.fish.util.api.entity.Credential;
+import com.ippteam.fish.util.api.model.Credential;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.UUID;
 
 /**
  * Created by isunimp on 16/11/15.

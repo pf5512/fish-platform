@@ -2,9 +2,9 @@ package com.ippteam.fish.util.api.interceptor;
 
 import com.ippteam.fish.service.DeveloperService;
 import com.ippteam.fish.util.*;
-import com.ippteam.fish.util.api.entity.Credential;
-import com.ippteam.fish.util.api.entity.Result;
-import com.ippteam.fish.util.api.entity.Sign;
+import com.ippteam.fish.util.api.model.Credential;
+import com.ippteam.fish.util.api.model.Result;
+import com.ippteam.fish.util.api.model.Sign;
 import com.ippteam.fish.util.api.exception.CertificationException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

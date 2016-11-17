@@ -5,8 +5,8 @@ import com.ippteam.fish.model.Login;
 import com.ippteam.fish.util.Session;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
-import com.ippteam.fish.util.api.entity.Credential;
-import com.ippteam.fish.util.api.entity.Result;
+import com.ippteam.fish.util.api.model.Credential;
+import com.ippteam.fish.util.api.model.Result;
 import com.ippteam.fish.util.api.exception.*;
 import com.ippteam.fish.util.api.version.ApiVersion;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import static com.ippteam.fish.util.Final.*;
 

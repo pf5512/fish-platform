@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.api.entity;
+package com.ippteam.fish.util.api.model;
 
 import com.ippteam.fish.util.Random;
 
