@@ -8,16 +8,18 @@ public enum BusinessStatus {
     DONE(00000, null),
     UNKNOWN_ERROR(10000, "unknown error"),
 
-    USERNAME_EXISTING(10001, "username is existing"),
-    USERNAME_INVALID(10002, "username is invalid"),
+    UNDER_CONSTRUCTING(10001, "under-constructing"),
 
-    EMAIL_EXISTING(10003, "email is existing"),
-    EMAIL_INVALID(10004, "email is invalid"),
+    USERNAME_EXISTING(10021, "username is existing"),
+    USERNAME_INVALID(10022, "username is invalid"),
 
-    PHONE_EXISTING(10005, "phone is existing"),
-    PHONE_INVALID(10006, "phone is invalid"),
+    EMAIL_EXISTING(10023, "email is existing"),
+    EMAIL_INVALID(10024, "email is invalid"),
 
-    USERNAME_OR_PASSWORD_INVALID(10004, "username or password is invalid");
+    PHONE_EXISTING(10025, "phone is existing"),
+    PHONE_INVALID(10026, "phone is invalid"),
+
+    USERNAME_OR_PASSWORD_INVALID(10027, "username or password is invalid");
 
     private int code;
     private String des;

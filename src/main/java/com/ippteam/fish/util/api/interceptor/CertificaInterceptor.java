@@ -75,6 +75,11 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
+        if (!verifyApi(request, sign.getApi())) {
+            logger.debug(SIGN_FAIL_API_ERROR);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
+        }
+
         if (!verifyBody(request, sign.getBody())) {
             logger.debug(SIGN_FAIL_BODY_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
@@ -112,6 +117,18 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
                 currentExpiredTime - requestExpiredTime > 30000) ? false : true;
     }
 
+    /**
+     * 验证api
+     *
+     * @param request
+     * @param api
+     * @return
+     */
+    private boolean verifyApi(HttpServletRequest request, String api) {
+        String uri = request.getRequestURI();
+        int index = uri.lastIndexOf(api);
+        return index != -1 && index == uri.length() - api.length();
+    }
 
     /**
      * 检测body和request中的真实body是否被更改

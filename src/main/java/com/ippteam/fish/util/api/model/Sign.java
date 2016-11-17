@@ -5,6 +5,7 @@ package com.ippteam.fish.util.api.model;
  */
 public class Sign {
     long expiredTime;
+    String api;
     Object body;
     String token;
 
@@ -14,6 +15,14 @@ public class Sign {
 
     public void setExpiredTime(long expiredTime) {
         this.expiredTime = expiredTime;
+    }
+
+    public String getApi() {
+        return api;
+    }
+
+    public void setApi(String api) {
+        this.api = api;
     }
 
     public Object getBody() {
