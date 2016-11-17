@@ -1,9 +1,10 @@
 import com.ippteam.fish.model.Login;
 import com.ippteam.fish.util.*;
-import com.ippteam.fish.util.api.entity.Sign;
+import com.ippteam.fish.util.api.model.Sign;
+import com.ippteam.fish.util.email.*;
 import org.junit.Test;
+import org.springframework.beans.factory.config.EmbeddedValueResolver;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +107,7 @@ public class UtilTest {
     }
 
     @Test
-    public void testRegex() {
+    public void Regex() {
         boolean b = Verify.phone("18090910728");
         System.out.print(b);
     }
@@ -116,6 +117,27 @@ public class UtilTest {
         System.out.println(Random.UUIDString());
         System.out.println(Random._32String().length());
         System.out.println(Random.UUIDString().length());
+    }
+
+    @Test
+    public void email() {
+        ServerInfo serverInfo = new ServerInfo();
+        serverInfo.setServerHost("smtp.163.com");
+        serverInfo.setUserName("ansheck@163.com");
+        serverInfo.setPassword("renguiquanyy1");
+        serverInfo.setNick("isunimp");
+
+        EmailInfo emailInfo = new EmailInfo();
+        emailInfo.setToAddress("minghui.chi@changhong.com");
+        emailInfo.setSubject("测试主题");
+        emailInfo.setContent("测试内容");
+
+        try {
+            UserAgent userAgent = new UserAgent(serverInfo);
+            userAgent.sendTextMail(emailInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -142,7 +164,7 @@ public class UtilTest {
     }
 
     @Test
-    public void test(){
+    public void test() {
         System.out.println(Random._6Number());
     }
 }
