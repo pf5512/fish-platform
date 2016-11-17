@@ -6,7 +6,7 @@ package com.ippteam.fish.model;
 public class Login {
     String account;
     String password;
-    String authcode;
+    String authCode;
 
     public String getAccount() {
         return account;
@@ -24,11 +24,11 @@ public class Login {
         this.password = password;
     }
 
-    public String getAuthcode() {
-        return authcode;
+    public String getAuthCode() {
+        return authCode;
     }
 
-    public void setAuthcode(String authcode) {
-        this.authcode = authcode;
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
     }
 }

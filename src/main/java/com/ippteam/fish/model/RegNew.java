@@ -7,7 +7,7 @@ public class RegNew {
     String account;
     String password;
     RegisterWay registerWay;
-    String authcode;
+    String authCode;
 
     public String getAccount() {
         return account;
@@ -33,11 +33,11 @@ public class RegNew {
         this.registerWay = registerWay;
     }
 
-    public String getAuthcode() {
-        return authcode;
+    public String getAuthCode() {
+        return authCode;
     }
 
-    public void setAuthcode(String authcode) {
-        this.authcode = authcode;
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
     }
 }

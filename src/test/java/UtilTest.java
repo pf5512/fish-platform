@@ -1,4 +1,6 @@
 import com.ippteam.fish.model.Login;
+import com.ippteam.fish.model.RegNew;
+import com.ippteam.fish.model.RegisterWay;
 import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.api.model.Sign;
 import com.ippteam.fish.util.email.*;
@@ -140,17 +142,8 @@ public class UtilTest {
         }
     }
 
-    @Test
-    public void sign() {
+    public void sign(Sign sign) {
         String securityKey = "0e5b78c1ff6f4ed4a169fea3d3eda528";
-
-        Sign sign = new Sign();
-        Login login = new Login();
-        login.setAccount("ansheck");
-        login.setPassword("123456");
-        sign.setExpiredTime(System.currentTimeMillis());
-        sign.setBody(login);
-
         try {
             String signString = JSON.stringify(sign);
             byte[] buff = AES.encrypt(signString, securityKey);
@@ -164,7 +157,32 @@ public class UtilTest {
     }
 
     @Test
-    public void test() {
-        System.out.println(Random._6Number());
+    public void loginSign() {
+        Login login = new Login();
+        login.setAccount("ansheck");
+        login.setPassword("123456");
+
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/session/login");
+        sign.setBody(login);
+
+        sign(sign);
+    }
+
+    @Test
+    public void regNewSign() {
+        RegNew regNew = new RegNew();
+        regNew.setRegisterWay(RegisterWay.EMAIL);
+        regNew.setAccount("ansheck");
+        regNew.setPassword("123456");
+        regNew.setAuthCode("");
+
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/user/regnew");
+        sign.setBody(regNew);
+
+        sign(sign);
     }
 }
