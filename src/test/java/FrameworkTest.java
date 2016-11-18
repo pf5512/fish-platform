@@ -29,7 +29,7 @@ public class FrameworkTest {
         SqlSessionFactory sqlSessionFactory;
         Reader reader;
         try {
-            reader = Resources.getResourceAsReader("Configure.xml");
+            reader = Resources.getResourceAsReader("mybatis.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             SqlSession session = sqlSessionFactory.openSession();
             User user = (User) session.selectOne("com.ippteam.fish.dao.UserMapper.selectByPrimaryKey", 10);

@@ -28,7 +28,6 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-
     <!--- StringHttpMessageConverter bean -->
     <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"/>
     <bean id="jsonHttpMessageConverter"
@@ -63,7 +62,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath*:/*Mapper.xml"/>
-        <!--<property name="configLocation" value="classpath:Configure.xml"/>-->
+        <!--<property name="configLocation" value="classpath:mybatis.xml"/>-->
     </bean>
 
     <!--事务管理-->
