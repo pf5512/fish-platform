@@ -11,7 +11,10 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.request.async.StandardServletAsyncWebRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 import java.io.Reader;
 import java.util.Date;
@@ -32,7 +35,7 @@ public class FrameworkTest {
             reader = Resources.getResourceAsReader("mybatis.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             SqlSession session = sqlSessionFactory.openSession();
-            User user = (User) session.selectOne("com.ippteam.fish.dao.UserMapper.selectByPrimaryKey", 10);
+            User user = (User) session.selectOne("com.ippteam.fish.dao.UserMapper.selectByPrimaryKey", 13);
             System.out.println(user);
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +50,7 @@ public class FrameworkTest {
         SqlSession session = sqlSessionFactory.openSession();
         try {
             User user = (User) session.selectOne(
-                    "com.ippteam.fish.dao.UserMapper.selectByPrimaryKey", 10);
+                    "com.ippteam.fish.dao.UserMapper.selectByPrimaryKey", 13);
             System.out.println(user);
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,8 +115,7 @@ public class FrameworkTest {
     }
 
     @Test
-    public void sign() {
-
+    public void developerDao() {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         DeveloperMapper developerDao = (DeveloperMapper) context.getBean("DeveloperDao");
         DeveloperExample developerExample = new DeveloperExample();
@@ -121,5 +123,14 @@ public class FrameworkTest {
         List<Developer> developers = developerDao.selectByExample(developerExample);
         Developer developer = developers.get(0);
         System.out.println(developers.size());
+    }
+
+    @Test
+    public void redisPool() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        ShardedJedisPool redisPool = (ShardedJedisPool) context.getBean("shardedJedisPool");
+        ShardedJedis redis = redisPool.getResource();
+        String value = redis.get("k1");
+        System.out.println(value);
     }
 }

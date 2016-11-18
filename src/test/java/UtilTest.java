@@ -6,6 +6,7 @@ import com.ippteam.fish.util.api.model.Sign;
 import com.ippteam.fish.util.email.*;
 import org.junit.Test;
 import org.springframework.beans.factory.config.EmbeddedValueResolver;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,6 +141,14 @@ public class UtilTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void redis(){
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.set("k1","hhhh");
+        String s = jedis.get("k1");
+        System.out.println(s);
     }
 
     public void sign(Sign sign) {
