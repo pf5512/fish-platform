@@ -1,5 +1,6 @@
 import com.ippteam.fish.dao.DeveloperMapper;
 import com.ippteam.fish.dao.UserMapper;
+import com.ippteam.fish.dao.nosql.Redis;
 import com.ippteam.fish.entity.Developer;
 import com.ippteam.fish.entity.DeveloperExample;
 import com.ippteam.fish.entity.User;
@@ -11,7 +12,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.context.request.async.StandardServletAsyncWebRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
@@ -131,6 +131,14 @@ public class FrameworkTest {
         ShardedJedisPool redisPool = (ShardedJedisPool) context.getBean("shardedJedisPool");
         ShardedJedis redis = redisPool.getResource();
         String value = redis.get("k1");
+        redis.close();
         System.out.println(value);
+    }
+
+    @Test
+    public void redisDao() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        Redis redis = (Redis) context.getBean("redisDao");
+        System.out.println(redis.get("k1"));
     }
 }
