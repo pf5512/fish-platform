@@ -1,11 +1,17 @@
+import com.ippteam.fish.model.AuthCode;
 import com.ippteam.fish.model.Login;
 import com.ippteam.fish.model.RegNew;
 import com.ippteam.fish.model.RegisterWay;
 import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.api.model.Sign;
 import com.ippteam.fish.util.email.*;
+import com.mongodb.*;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
+import org.bson.*;
+import org.bson.conversions.Bson;
 import org.junit.Test;
-import org.springframework.beans.factory.config.EmbeddedValueResolver;
+import org.omg.CosNaming._BindingIteratorImplBase;
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
@@ -144,11 +150,42 @@ public class UtilTest {
     }
 
     @Test
-    public void redis(){
+    public void redis() {
         Jedis jedis = new Jedis("127.0.0.1", 6379);
-        jedis.set("k1","hhhh");
+        jedis.set("k1", "hhhh");
         String s = jedis.get("k1");
         System.out.println(s);
+    }
+
+    @Test
+    public void mongo() {
+        try {
+            //通过连接认证获取MongoDB连接
+            MongoClient mongoClient = new MongoClient("localhost", 27017);
+            //连接到数据库
+            MongoDatabase mongoDatabase = mongoClient.getDatabase("fish");
+            MongoCollection<Document> collection = mongoDatabase.getCollection("fishing_ground");
+            BasicDBObject geo = new BasicDBObject("type", "Point");
+            BasicDBList coordinates = new BasicDBList();
+            coordinates.add(1);
+            coordinates.add(2);
+            geo.put("coordinates", coordinates);
+
+            BasicDBObject object = new BasicDBObject("loc",
+                    new BasicDBObject("$near",
+                            new BasicDBObject("$geometry", geo)
+                    )
+            );
+
+            FindIterable<Document> findIterable = collection.find(object);
+            MongoCursor<Document> mongoCursor = findIterable.iterator();
+            while (mongoCursor.hasNext()) {
+                System.out.println(mongoCursor.next());
+            }
+            System.out.println("Connect to database successfully");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
     }
 
     public void sign(Sign sign) {
@@ -193,5 +230,25 @@ public class UtilTest {
         sign.setBody(regNew);
 
         sign(sign);
+    }
+
+    @Test
+    public void authCode() {
+        AuthCode authCode = new AuthCode();
+        authCode.setEmail("ansheck@163.com");
+
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/authcode/email");
+        sign.setBody(authCode);
+
+        sign(sign);
+    }
+
+    @Test
+    public void test() {
+
+        System.out.println("sss" + Random._6Number());
+
     }
 }

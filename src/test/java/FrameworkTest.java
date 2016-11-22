@@ -1,24 +1,42 @@
 import com.ippteam.fish.dao.DeveloperMapper;
 import com.ippteam.fish.dao.UserMapper;
-import com.ippteam.fish.dao.nosql.Redis;
+import com.ippteam.fish.dao.nosql.mongodb.FishingGroundDao;
+import com.ippteam.fish.dao.nosql.redis.*;
 import com.ippteam.fish.entity.Developer;
 import com.ippteam.fish.entity.DeveloperExample;
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.entity.nosql.mongodb.FishingGround;
+import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.service.UserServiceImpl;
+import com.ippteam.fish.util.JSON;
+import com.mongodb.*;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.geo.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.NearQuery;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
+import javax.print.DocFlavor;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.geoNear;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 /**
  * Created by isunimp on 16/11/2.
@@ -131,6 +149,7 @@ public class FrameworkTest {
         ShardedJedisPool redisPool = (ShardedJedisPool) context.getBean("shardedJedisPool");
         ShardedJedis redis = redisPool.getResource();
         String value = redis.get("k1");
+        System.out.println(redis.set("k2", "v2"));
         redis.close();
         System.out.println(value);
     }
@@ -140,5 +159,33 @@ public class FrameworkTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         Redis redis = (Redis) context.getBean("redisDao");
         System.out.println(redis.get("k1"));
+        System.out.println(redis.exists("k1"));
+    }
+
+    @Test
+    public void redisService() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        AuthCodeService redis = (AuthCodeService) context.getBean("AuthCodeService");
+        System.out.println(redis.generate("ansheck@163.com"));
+        System.out.println(redis.generate("ansheck@163.com"));
+        System.out.println(redis.generate("ansheck@163.com"));
+        System.out.println(redis.generate("ansheck@163.com"));
+//        System.out.println(redis.verify("3923221", "ansheck@163.com"));
+    }
+
+    @Test
+    public void mongo() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        MongoTemplate mongoTemplate = (MongoTemplate) context.getBean("mongoTemplate");
+
+
+    }
+
+    @Test
+    public void fishingGroundDao() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        FishingGroundDao fishingGroundDao = (FishingGroundDao) context.getBean("FishingGroundDao");
+        List<FishingGround> fishingGrounds = fishingGroundDao.near(103.45, 30.42, 0);
+        System.out.println(fishingGrounds.size());
     }
 }
