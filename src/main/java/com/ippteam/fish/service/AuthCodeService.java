@@ -11,4 +11,6 @@ public interface AuthCodeService {
     public boolean generate(String account) throws UnsupportedEncodingException, MessagingException;
 
     public boolean verify(String authCode, String account);
+
+    public boolean delete(String authCode);
 }

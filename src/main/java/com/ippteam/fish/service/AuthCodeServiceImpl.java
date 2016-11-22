@@ -63,4 +63,9 @@ public class AuthCodeServiceImpl implements AuthCodeService {
         String result = redis.get(key);
         return result.equals(account);
     }
+
+    public boolean delete(String authCode) {
+        String key = redisKey(authCode);
+        return redis.del(key);
+    }
 }
