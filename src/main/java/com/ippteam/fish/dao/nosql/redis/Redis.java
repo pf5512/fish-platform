@@ -1,5 +1,6 @@
-package com.ippteam.fish.dao.nosql;
+package com.ippteam.fish.dao.nosql.redis;
 
+import com.ippteam.fish.util.Verify;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,20 @@ public class Redis {
 
     @Autowired
     private ShardedJedisPool shardedJedisPool;
+
+    public boolean exists(String key) {
+        if (!Verify.string(key)) return false;
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = shardedJedisPool.getResource();
+            return shardedJedis.exists(key);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        } finally {
+            shardedJedis.close();
+        }
+        return false;
+    }
 
     /**
      * 设置一个key的过期时间（单位：秒）
@@ -712,8 +727,8 @@ public class Redis {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedJedisPool.getResource();
-            shardedJedis.setex(key, second, value);
-            return true;
+            String result = shardedJedis.setex(key, second, value);
+            return "OK".equals(result);
         } catch (Exception ex) {
             logger.error("set error.", ex);
         } finally {
@@ -726,8 +741,8 @@ public class Redis {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedJedisPool.getResource();
-            shardedJedis.set(key, value);
-            return true;
+            String result = shardedJedis.set(key, value);
+            return "OK".equals(result);
         } catch (Exception ex) {
             logger.error("set error.", ex);
         } finally {
