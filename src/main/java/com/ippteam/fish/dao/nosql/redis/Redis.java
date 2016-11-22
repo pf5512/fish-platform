@@ -769,8 +769,7 @@ public class Redis {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedJedisPool.getResource();
-            shardedJedis.del(key);
-            return true;
+            return shardedJedis.del(key) == 1;
         } catch (Exception ex) {
             logger.error("del error.", ex);
         } finally {
