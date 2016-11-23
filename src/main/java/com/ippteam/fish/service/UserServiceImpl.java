@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
             user.setUserName(null);
             user.setEmail(null);
         } else {
-            throw new ParameterException(EXCEPTION_REQUEST_BODY_PARAM_INVALID);
+            return null;
         }
 
         // 验证是否已经被注册
@@ -101,5 +101,11 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return this.getUserByAccount(account);
+    }
+
+    public User update(User user) {
+        Integer id = user.getId();
+        userDao.updateByPrimaryKey(user);
+        return userDao.selectByPrimaryKey(id);
     }
 }

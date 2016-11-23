@@ -21,4 +21,6 @@ public interface UserService {
     User login(String account, String pwd);
 
     User register(User user);
+
+    User update(User user);
 }

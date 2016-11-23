@@ -54,7 +54,7 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 加密过的
-        byte[] encryptedBuff = ConvertByte.parseHexStr2Byte(signEncrypt);
+        byte[] encryptedBuff = Convert.parseHexStr2Byte(signEncrypt);
         if (!Verify.buffer(encryptedBuff)) {
             logger.debug(SIGN_FAIL_SIGN_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
@@ -179,10 +179,11 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
         }
 
         String[] filterURIs = {
-                Final.NO_NEED_AUTH_URI_LOGIN,
-                Final.NO_NEED_AUTH_URI_REGNEW,
-                Final.NO_NEED_AUTH_URI_RESETPWD,
-                Final.NO_NEED_AUTH_URI_WEATHER
+                NO_NEED_AUTH_URI_LOGIN,
+                NO_NEED_AUTH_URI_REGNEW,
+                NO_NEED_AUTH_URI_RESETPWD,
+                NO_NEED_AUTH_URI_WEATHER,
+                NO_NEED_AUTH_URI_AUTHCODE_EMAIL
         };
         for (String iten : filterURIs) {
             if (uri.lastIndexOf(iten) == uri.length() - iten.length()) {
