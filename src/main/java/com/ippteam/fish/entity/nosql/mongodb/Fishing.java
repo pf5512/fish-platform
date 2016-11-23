@@ -13,8 +13,8 @@ import org.springframework.data.geo.Point;
  * Created by isunimp on 16/11/21.
  */
 
-@Document(collection = "fishing_ground")
-public class FishingGround {
+@Document(collection = "fishing")
+public class Fishing {
 
     @Id
     @JsonIgnore
@@ -26,21 +26,21 @@ public class FishingGround {
 
     Location loc;
 
-    public FishingGround() {
+    public Fishing() {
 
     }
 
-    static public FishingGround newFishingGround(DBObject dbObject) throws Exception {
+    static public Fishing newFishingGround(DBObject dbObject) throws Exception {
         String string = JSON.stringify(dbObject);
-        FishingGround fishingGround = JSON.parse(string, FishingGround.class);
+        Fishing fishing = JSON.parse(string, Fishing.class);
         if (dbObject instanceof BasicDBObject) {
             BasicDBObject basicDBObject = (BasicDBObject) dbObject;
             Object idObject = basicDBObject.get("_id");
             if (idObject instanceof ObjectId) {
-                fishingGround.set_id((ObjectId) idObject);
+                fishing.set_id((ObjectId) idObject);
             }
         }
-        return fishingGround;
+        return fishing;
     }
 
     public ObjectId get_id() {

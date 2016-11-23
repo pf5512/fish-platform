@@ -1,11 +1,11 @@
 import com.ippteam.fish.dao.DeveloperMapper;
 import com.ippteam.fish.dao.UserMapper;
-import com.ippteam.fish.dao.nosql.mongodb.FishingGroundDao;
+import com.ippteam.fish.dao.nosql.mongodb.FishingDao;
 import com.ippteam.fish.dao.nosql.redis.*;
 import com.ippteam.fish.entity.Developer;
 import com.ippteam.fish.entity.DeveloperExample;
 import com.ippteam.fish.entity.User;
-import com.ippteam.fish.entity.nosql.mongodb.FishingGround;
+import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.service.UserServiceImpl;
 import com.ippteam.fish.util.JSON;
@@ -184,8 +184,8 @@ public class FrameworkTest {
     @Test
     public void fishingGroundDao() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
-        FishingGroundDao fishingGroundDao = (FishingGroundDao) context.getBean("FishingGroundDao");
-        List<FishingGround> fishingGrounds = fishingGroundDao.near(103.45, 30.42, 0);
-        System.out.println(fishingGrounds.size());
+        FishingDao fishingDao = (FishingDao) context.getBean("FishingGroundDao");
+        List<Fishing> fishings = fishingDao.near(103.45, 30.42, 0);
+        System.out.println(fishings.size());
     }
 }

@@ -1,6 +1,6 @@
 package com.ippteam.fish.dao.nosql.mongodb;
 
-import com.ippteam.fish.entity.nosql.mongodb.FishingGround;
+import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.util.JSON;
 import com.mongodb.*;
 import com.mongodb.client.FindIterable;
@@ -24,18 +24,18 @@ import javax.annotation.Resource;
  * Created by isunimp on 16/11/22.
  */
 
-@Repository("FishingGroundDao")
-public class FishingGroundDao {
+@Repository("FishingDao")
+public class FishingDao {
 
     @Autowired
     MongoTemplate mongoTemplate;
 
-    public void insert(FishingGround fishingGround, String collectionName) {
-        mongoTemplate.insert(fishingGround, collectionName);
+    public void insert(Fishing fishing, String collectionName) {
+        mongoTemplate.insert(fishing, collectionName);
     }
 
-    public List<FishingGround> near(final double longitude, final double latitude, double maxDistance) throws Exception {
-        DBCollection collection = mongoTemplate.getCollection("fishing_ground");
+    public List<Fishing> near(final double longitude, final double latitude, double maxDistance) throws Exception {
+        DBCollection collection = mongoTemplate.getCollection("fishing");
 
         BasicDBList coordinates = new BasicDBList();
         coordinates.add(longitude);
@@ -55,11 +55,11 @@ public class FishingGroundDao {
         BasicDBObject conditionBbject = new BasicDBObject("loc", loc);
 
         DBCursor cursor = collection.find(conditionBbject);
-        List<FishingGround> fishingGrounds = new ArrayList<FishingGround>();
+        List<Fishing> fishings = new ArrayList<Fishing>();
         while (cursor.hasNext()) {
             DBObject dbObject = cursor.next();
-            fishingGrounds.add(FishingGround.newFishingGround(dbObject));
+            fishings.add(Fishing.newFishingGround(dbObject));
         }
-        return fishingGrounds;
+        return fishings;
     }
 }
