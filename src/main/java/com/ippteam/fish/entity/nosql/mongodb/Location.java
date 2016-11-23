@@ -8,7 +8,7 @@ import java.util.List;
  * Created by isunimp on 16/11/21.
  */
 public class Location {
-    String type;
+    String type = "Point";
     // 保存一个坐标点的两个参数（经度/纬度）
     List coordinates;
 

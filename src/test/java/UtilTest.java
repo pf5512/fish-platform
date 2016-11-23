@@ -1,3 +1,4 @@
+import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.model.AuthCode;
 import com.ippteam.fish.model.Login;
 import com.ippteam.fish.model.RegNew;
@@ -248,7 +249,7 @@ public class UtilTest {
     @Test
     public void test() {
 
-        System.out.println("sss" + Random._6Number());
+        System.out.println(Fishing.class.getSimpleName());
 
     }
 }

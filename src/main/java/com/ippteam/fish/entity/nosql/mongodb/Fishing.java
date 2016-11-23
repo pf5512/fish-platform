@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.geo.Point;
 
+import java.util.List;
+
 /**
  * Created by isunimp on 16/11/21.
  */
@@ -25,10 +27,6 @@ public class Fishing {
     long adder;
 
     Location loc;
-
-    public Fishing() {
-
-    }
 
     static public Fishing newFishingGround(DBObject dbObject) throws Exception {
         String string = JSON.stringify(dbObject);

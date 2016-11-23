@@ -30,8 +30,14 @@ public class FishingDao {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    public void insert(Fishing fishing, String collectionName) {
-        mongoTemplate.insert(fishing, collectionName);
+    public void insert(Fishing fishing) {
+        if (!mongoTemplate.collectionExists(Fishing.class)) {
+            mongoTemplate.createCollection(Fishing.class);
+            String collectionName = mongoTemplate.getCollectionName(Fishing.class);
+            DBCollection collection = mongoTemplate.getCollection(collectionName);
+            collection.createIndex(new BasicDBObject("loc", "2dsphere"));
+        }
+        mongoTemplate.insert(fishing);
     }
 
     public List<Fishing> near(final double longitude, final double latitude, double maxDistance) throws Exception {

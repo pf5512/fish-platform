@@ -1,41 +1,31 @@
 import com.ippteam.fish.dao.DeveloperMapper;
 import com.ippteam.fish.dao.UserMapper;
-import com.ippteam.fish.dao.nosql.mongodb.FishingDao;
 import com.ippteam.fish.dao.nosql.redis.*;
 import com.ippteam.fish.entity.Developer;
 import com.ippteam.fish.entity.DeveloperExample;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
+import com.ippteam.fish.entity.nosql.mongodb.Location;
 import com.ippteam.fish.service.AuthCodeService;
+import com.ippteam.fish.service.FishingServise;
 import com.ippteam.fish.service.UserServiceImpl;
-import com.ippteam.fish.util.JSON;
-import com.mongodb.*;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.geo.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.NearQuery;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
-import javax.print.DocFlavor;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.geoNear;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 /**
@@ -184,8 +174,19 @@ public class FrameworkTest {
     @Test
     public void fishingGroundDao() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
-        FishingDao fishingDao = (FishingDao) context.getBean("FishingGroundDao");
-        List<Fishing> fishings = fishingDao.near(103.45, 30.42, 0);
+        FishingServise fishingServise = (FishingServise) context.getBean("FishingServise");
+        ArrayList<Object> loc = new ArrayList<Object>();
+        loc.add(103.45);
+        loc.add(30.42);
+        Location location = new Location();
+        location.setType("Point");
+        location.setCoordinates(loc);
+        Fishing fishing = new Fishing();
+        fishing.setTitle("测试渔场");
+        fishing.setAdder(13);
+        fishing.setLoc(location);
+//        fishingServise.add(fishing);
+        List<Fishing> fishings = fishingServise.near(103.45, 30.42, 0);
         System.out.println(fishings.size());
     }
 }

@@ -63,6 +63,7 @@
         </property>
     </bean>
 
+
     <!--mybatis配置-->
     <!--数据源-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -86,6 +87,7 @@
         <property name="basePackage" value="com.ippteam.fish.dao"/>
     </bean>
 
+
     <!--redis配置-->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxTotal" value="${redis.pool.maxActive}"/>
@@ -105,6 +107,8 @@
         </constructor-arg>
     </bean>
 
+
+    <!--mongodb配置-->
     <mongo:mongo-client id="mongo" replica-set="${mongo.replicaSet}">
         <mongo:client-options write-concern="NORMAL"
                               connections-per-host="${mongo.connectionsPerHost}"
@@ -114,10 +118,27 @@
                               socket-keep-alive="${mongo.socketKeepAlive}"
                               socket-timeout="${mongo.socketTimeout}"/>
     </mongo:mongo-client>
+
+
     <!-- 设置使用的数据库名-->
     <mongo:db-factory dbname="fish" mongo-ref="mongo"/>
+    <bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
+    <!-- 默认Mongodb类型映射 去掉_class字段-->
+    <bean id="defaultMongoTypeMapper" class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+        <constructor-arg name="typeKey">
+            <null/>
+        </constructor-arg>
+    </bean>
+    <!-- 配置mongodb映射类型 -->
+    <bean id="mappingMongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mappingContext" ref="mappingContext"/>
+        <property name="typeMapper" ref="defaultMongoTypeMapper"/>
+    </bean>
     <!-- mongodb的模板 -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mongoConverter" ref="mappingMongoConverter"/>
     </bean>
+
 </beans>
