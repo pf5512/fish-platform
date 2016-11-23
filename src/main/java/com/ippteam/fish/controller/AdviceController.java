@@ -1,6 +1,6 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.util.api.model.*;
+import com.ippteam.fish.util.api.pojo.*;
 import com.ippteam.fish.util.api.exception.*;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;

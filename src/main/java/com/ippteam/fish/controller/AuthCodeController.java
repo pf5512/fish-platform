@@ -5,7 +5,7 @@ import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
 import com.ippteam.fish.util.api.exception.BusinessException;
-import com.ippteam.fish.util.api.model.Result;
+import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.version.ApiVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

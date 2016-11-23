@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.api.model;
+package com.ippteam.fish.util.api.pojo;
 
 import com.ippteam.fish.util.Random;
 

@@ -1,7 +1,7 @@
 package com.ippteam.fish.util;
 
 import com.ippteam.fish.entity.User;
-import com.ippteam.fish.util.api.model.Credential;
+import com.ippteam.fish.util.api.pojo.Credential;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

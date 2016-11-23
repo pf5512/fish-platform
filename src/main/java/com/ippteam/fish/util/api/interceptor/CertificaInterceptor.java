@@ -2,9 +2,9 @@ package com.ippteam.fish.util.api.interceptor;
 
 import com.ippteam.fish.service.DeveloperService;
 import com.ippteam.fish.util.*;
-import com.ippteam.fish.util.api.model.Credential;
-import com.ippteam.fish.util.api.model.Result;
-import com.ippteam.fish.util.api.model.Sign;
+import com.ippteam.fish.util.api.pojo.Credential;
+import com.ippteam.fish.util.api.pojo.Result;
+import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.api.exception.CertificationException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.ippteam.fish.util.api.model;
+package com.ippteam.fish.util.api.pojo;
 
 /**
  * Created by pactera on 16/10/31.
