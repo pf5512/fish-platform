@@ -1,6 +1,4 @@
-package com.ippteam.fish.model;
-
-import com.ippteam.fish.util.Verify;
+package com.ippteam.fish.pojo;
 
 /**
  * Created by isunimp on 16/11/15.

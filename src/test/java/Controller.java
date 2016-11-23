@@ -1,13 +1,10 @@
 import com.ippteam.fish.controller.*;
-import com.ippteam.fish.model.AuthCode;
-import com.ippteam.fish.model.RegNew;
-import com.ippteam.fish.model.RegisterWay;
+import com.ippteam.fish.pojo.AuthCode;
+import com.ippteam.fish.pojo.RegNew;
+import com.ippteam.fish.pojo.RegisterWay;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by isunimp on 16/11/23.

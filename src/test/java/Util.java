@@ -1,8 +1,7 @@
-import com.ippteam.fish.entity.nosql.mongodb.Fishing;
-import com.ippteam.fish.model.AuthCode;
-import com.ippteam.fish.model.Login;
-import com.ippteam.fish.model.RegNew;
-import com.ippteam.fish.model.RegisterWay;
+import com.ippteam.fish.pojo.AuthCode;
+import com.ippteam.fish.pojo.Login;
+import com.ippteam.fish.pojo.RegNew;
+import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.api.model.Sign;
 import com.ippteam.fish.util.email.*;
@@ -10,9 +9,7 @@ import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.*;
 import org.bson.*;
-import org.bson.conversions.Bson;
 import org.junit.Test;
-import org.omg.CosNaming._BindingIteratorImplBase;
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;

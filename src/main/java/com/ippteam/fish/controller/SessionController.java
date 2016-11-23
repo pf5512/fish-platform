@@ -1,7 +1,7 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
-import com.ippteam.fish.model.Login;
+import com.ippteam.fish.pojo.Login;
 import com.ippteam.fish.util.Session;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;

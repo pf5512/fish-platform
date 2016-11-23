@@ -1,4 +1,4 @@
-package com.ippteam.fish.model;
+package com.ippteam.fish.pojo;
 
 /**
  * Created by isunimp on 16/11/15.

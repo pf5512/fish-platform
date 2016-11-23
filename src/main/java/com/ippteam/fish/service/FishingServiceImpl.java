@@ -11,7 +11,7 @@ import java.util.List;
  * Created by isunimp on 16/11/23.
  */
 @Service("FishingService")
-public class FishingServiceImpl implements FishingServise {
+public class FishingServiceImpl implements FishingService {
 
     @Autowired
     FishingDao fishingDao;

@@ -1,6 +1,6 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.model.AuthCode;
+import com.ippteam.fish.pojo.AuthCode;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;

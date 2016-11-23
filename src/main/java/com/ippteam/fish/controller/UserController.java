@@ -1,7 +1,7 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
-import com.ippteam.fish.model.RegNew;
+import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Convert;
 import com.ippteam.fish.util.Session;
