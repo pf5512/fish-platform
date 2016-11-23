@@ -1,9 +1,8 @@
-import com.ippteam.fish.pojo.AuthCode;
 import com.ippteam.fish.pojo.Login;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.util.*;
-import com.ippteam.fish.util.api.model.Sign;
+import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.email.*;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
@@ -232,14 +231,9 @@ public class Util {
 
     @Test
     public void authCode() {
-        AuthCode authCode = new AuthCode();
-        authCode.setEmail("ansheck@163.com");
-
         Sign sign = new Sign();
         sign.setExpiredTime(System.currentTimeMillis());
         sign.setApi("/v1/authcode/email");
-        sign.setBody(authCode);
-
         sign(sign);
     }
 
@@ -248,6 +242,5 @@ public class Util {
         String ipStr = "127.0.0.1";
         long ipLong = Convert.ipToLong(ipStr);
         System.out.println(Convert.longToIP(0));
-
     }
 }

@@ -52,6 +52,7 @@ public class Convert {
         int position1 = IPString.indexOf(".");
         int position2 = IPString.indexOf(".", position1 + 1);
         int position3 = IPString.indexOf(".", position2 + 1);
+        if (position1 < 0 || position2 < 0 || position3 < 0) return 0;
         //将每个.之间的字符串转换成整型
         ip[0] = Long.parseLong(IPString.substring(0, position1));
         ip[1] = Long.parseLong(IPString.substring(position1 + 1, position2));

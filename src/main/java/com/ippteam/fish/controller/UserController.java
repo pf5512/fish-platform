@@ -49,7 +49,7 @@ public class UserController extends BaseController {
         String account = regNew.getAccount();
         String pwd = regNew.getPassword();
         if (!Verify.string(pwd)) {
-            throw new ParameterException(EXCEPTION_REQUEST_BODY_PARAM_INVALID);
+            throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
 
         if (!authCodeService.verify(authCode, account)) {
@@ -118,7 +118,7 @@ public class UserController extends BaseController {
         String account = regNew.getAccount();
         String pwd = regNew.getPassword();
         if (!Verify.string(pwd)) {
-            throw new ParameterException(EXCEPTION_REQUEST_BODY_PARAM_INVALID);
+            throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
 
         if (!authCodeService.verify(authCode, account)) {
@@ -142,7 +142,7 @@ public class UserController extends BaseController {
                 throw new BusinessException(BusinessStatus.UNDER_CONSTRUCTING_REGNEW_PHONE);
             }
             default: {
-                throw new ParameterException(EXCEPTION_REQUEST_BODY_PARAM_INVALID);
+                throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
             }
         }
 

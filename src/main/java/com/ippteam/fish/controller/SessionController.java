@@ -32,7 +32,7 @@ public class SessionController extends BaseController {
     public Result login(@RequestBody Login login, HttpServletRequest request) {
         if (!Verify.string(login.getAccount()) ||
                 !Verify.string(login.getPassword())) {
-            throw new ParameterException(EXCEPTION_REQUEST_BODY_PARAM_INVALID);
+            throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
 
         User user = userService.login(login.getAccount(), login.getPassword());
