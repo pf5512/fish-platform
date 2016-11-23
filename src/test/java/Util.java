@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UtilTest {
+public class Util {
     @Test
     public void newSecretKey() {
         System.out.println(AES.newSecretKey());
@@ -32,7 +32,7 @@ public class UtilTest {
         String password = "12345678";
         System.out.println("加密前：" + content);
         byte[] encryptResult = AES.encrypt(content, password);
-        System.out.println(ConvertByte.parseByte2HexStr(encryptResult));
+        System.out.println(Convert.parseByte2HexStr(encryptResult));
         byte[] decryptResult = AES.decrypt(encryptResult, password);
         System.out.println("解密后：" + new String(decryptResult));
     }
@@ -195,7 +195,7 @@ public class UtilTest {
             String signString = JSON.stringify(sign);
             byte[] buff = AES.encrypt(signString, securityKey);
             // 转换成hex字符串
-            String hexString = ConvertByte.parseByte2HexStr(buff);
+            String hexString = Convert.parseByte2HexStr(buff);
             System.out.println(signString);
             System.out.println(hexString);
         } catch (Exception e) {
@@ -248,8 +248,9 @@ public class UtilTest {
 
     @Test
     public void test() {
-
-        System.out.println(Fishing.class.getSimpleName());
+        String ipStr = "127.0.0.1";
+        long ipLong = Convert.ipToLong(ipStr);
+        System.out.println(Convert.longToIP(0));
 
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public class Fix {
 
     static public <E> E list(List<E> list, int index) {
-        return list != null && list.size() > 0 && index > 0 && list.size() > index ? list.get(index) : null;
+        return list != null && list.size() > 0 && index >= 0 && list.size() > index ? list.get(index) : null;
     }
 
 }
