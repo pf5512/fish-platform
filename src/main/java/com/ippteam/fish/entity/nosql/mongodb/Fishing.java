@@ -22,11 +22,11 @@ public class Fishing {
     @JsonIgnore
     ObjectId _id;
 
-    String title;
+    String summary;
 
     long adder;
 
-    Location loc;
+    Location location;
 
     static public Fishing newFishingGround(DBObject dbObject) throws Exception {
         String string = JSON.stringify(dbObject);
@@ -49,12 +49,12 @@ public class Fishing {
         this._id = _id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public long getAdder() {
@@ -65,11 +65,11 @@ public class Fishing {
         this.adder = adder;
     }
 
-    public Location getLoc() {
-        return loc;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLoc(Location loc) {
-        this.loc = loc;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

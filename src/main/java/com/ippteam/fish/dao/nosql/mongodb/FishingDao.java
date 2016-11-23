@@ -35,7 +35,7 @@ public class FishingDao {
             mongoTemplate.createCollection(Fishing.class);
             String collectionName = mongoTemplate.getCollectionName(Fishing.class);
             DBCollection collection = mongoTemplate.getCollection(collectionName);
-            collection.createIndex(new BasicDBObject("loc", "2dsphere"));
+            collection.createIndex(new BasicDBObject("location", "2dsphere"));
         }
         mongoTemplate.insert(fishing);
     }
@@ -55,10 +55,10 @@ public class FishingDao {
         near.put("$geometry", geometry);
         near.put("$maxDistance", maxDistance);
 
-        BasicDBObject loc = new BasicDBObject();
-        loc.put("$near", near);
+        BasicDBObject location = new BasicDBObject();
+        location.put("$near", near);
 
-        BasicDBObject conditionBbject = new BasicDBObject("loc", loc);
+        BasicDBObject conditionBbject = new BasicDBObject("location", location);
 
         DBCursor cursor = collection.find(conditionBbject);
         List<Fishing> fishings = new ArrayList<Fishing>();

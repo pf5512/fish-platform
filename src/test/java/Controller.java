@@ -1,5 +1,4 @@
 import com.ippteam.fish.controller.*;
-import com.ippteam.fish.pojo.AuthCode;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
 import org.junit.Test;
@@ -27,8 +26,7 @@ public class Controller {
     public void authCode() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         AuthCodeController authCodeController = (AuthCodeController) context.getBean("AuthCodeController");
-        AuthCode authCode = new AuthCode();
-        authCode.setEmail("ansheck@163.com");
-        authCodeController.email(authCode);
+
+        authCodeController.email("ansheck@163.com");
     }
 }

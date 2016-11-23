@@ -1,9 +1,14 @@
 import com.ippteam.fish.controller.UserController;
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.entity.nosql.mongodb.Fishing;
+import com.ippteam.fish.entity.nosql.mongodb.Location;
 import com.ippteam.fish.service.*;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by isunimp on 16/11/23.
@@ -21,5 +26,26 @@ public class Service {
         user.setPassword("654321");
         userService.update(user);
         System.out.println(user.getId() + ":" + user.getPassword());
+    }
+
+    @Test
+    public void fishing() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        FishingService fishingService = (FishingService) context.getBean("FishingService");
+
+        List coordinates = new ArrayList<Double>();
+        coordinates.add(1);
+        coordinates.add(1);
+
+        Location location = new Location();
+        location.setType("Point");
+        location.setCoordinates(coordinates);
+
+        Fishing fishing = new Fishing();
+        fishing.setAdder(13);
+        fishing.setSummary("测试渔场");
+        fishing.setLocation(location);
+
+        fishingService.add(fishing);
     }
 }
