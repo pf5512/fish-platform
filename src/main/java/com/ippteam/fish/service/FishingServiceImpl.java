@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by isunimp on 16/11/23.
  */
-@Service("FishingServise")
-public class FishingServiseImpl implements FishingServise {
+@Service("FishingService")
+public class FishingServiceImpl implements FishingServise {
 
     @Autowired
     FishingDao fishingDao;

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by isunimp on 16/11/23.
  */
-public interface FishingServise {
+public interface FishingService {
 
     void add(Fishing fishing);
 
