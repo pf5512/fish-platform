@@ -25,7 +25,7 @@ import javax.annotation.Resource;
  */
 
 @Repository("FishingDao")
-public class FishingDao {
+public class FishingDao extends MongoBaseDao {
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -38,6 +38,22 @@ public class FishingDao {
             collection.createIndex(new BasicDBObject("location", "2dsphere"));
         }
         mongoTemplate.insert(fishing);
+    }
+
+    public void update(Fishing fishing) throws Exception {
+        Query query = new Query(Criteria.where("_id").is(new ObjectId(fishing.get_id())));
+        DBObject dbObject = BasicDBObjectBuilder.start()
+                .add("summary", fishing.getSummary())
+                .add("adder", fishing.getAdder())
+                .add("location", fishing.getLocation()).get();
+
+        Update update = new Update();
+        update.set("summary", dbObject);
+        mongoTemplate.updateFirst(query, update, Fishing.class);
+    }
+
+    public List<Fishing> all() {
+        return mongoTemplate.find(null, Fishing.class);
     }
 
     public List<Fishing> near(final double longitude, final double latitude, double maxDistance) throws Exception {
@@ -64,7 +80,8 @@ public class FishingDao {
         List<Fishing> fishings = new ArrayList<Fishing>();
         while (cursor.hasNext()) {
             DBObject dbObject = cursor.next();
-            fishings.add(Fishing.newFishingGround(dbObject));
+            Fishing fishing = JSON.parse(dbObject, Fishing.class);
+            fishings.add(fishing);
         }
         return fishings;
     }

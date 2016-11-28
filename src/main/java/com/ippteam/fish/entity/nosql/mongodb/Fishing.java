@@ -19,8 +19,7 @@ import java.util.List;
 public class Fishing {
 
     @Id
-    @JsonIgnore
-    ObjectId _id;
+    String _id;
 
     String summary;
 
@@ -28,24 +27,11 @@ public class Fishing {
 
     Location location;
 
-    static public Fishing newFishingGround(DBObject dbObject) throws Exception {
-        String string = JSON.stringify(dbObject);
-        Fishing fishing = JSON.parse(string, Fishing.class);
-        if (dbObject instanceof BasicDBObject) {
-            BasicDBObject basicDBObject = (BasicDBObject) dbObject;
-            Object idObject = basicDBObject.get("_id");
-            if (idObject instanceof ObjectId) {
-                fishing.set_id((ObjectId) idObject);
-            }
-        }
-        return fishing;
-    }
-
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 
