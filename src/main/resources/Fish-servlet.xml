@@ -14,12 +14,11 @@
        http://www.springframework.org/schema/data/mongo
        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
        http://www.springframework.org/schema/context/spring-context-3.0.xsd
-       http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd*"
-
->
+       http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd*">
 
     <context:annotation-config/>
     <context:component-scan base-package="com.ippteam"/>
+
 
     <!--加载配置文件-->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -32,6 +31,7 @@
         </property>
     </bean>
 
+
     <!--拦截器-->
     <!--<mvc:interceptors>-->
     <!--<mvc:interceptor>-->
@@ -39,14 +39,12 @@
     <!--<bean class="com.ippteam.fish.util.api.interceptor.CertificaInterceptor"/>-->
     <!--</mvc:interceptor>-->
     <!--</mvc:interceptors>-->
-
     <!--视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
           id="internalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-
     <!--- StringHttpMessageConverter bean -->
     <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter"/>
     <bean id="jsonHttpMessageConverter"
@@ -61,6 +59,12 @@
                 <ref bean="jsonHttpMessageConverter"/>
             </list>
         </property>
+    </bean>
+    <!--配置文件上传解析-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
+        <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
 
 
@@ -118,8 +122,6 @@
                               socket-keep-alive="${mongo.socketKeepAlive}"
                               socket-timeout="${mongo.socketTimeout}"/>
     </mongo:mongo-client>
-
-
     <!-- 设置使用的数据库名-->
     <mongo:db-factory dbname="fish" mongo-ref="mongo"/>
     <bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
@@ -139,6 +141,11 @@
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="mongoConverter" ref="mappingMongoConverter"/>
+    </bean>
+    <!-- 取图函数 -->
+    <bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+        <constructor-arg ref="mappingMongoConverter"/>
     </bean>
 
 </beans>

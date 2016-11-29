@@ -2,13 +2,12 @@ import com.ippteam.fish.dao.nosql.mongodb.FileDao;
 import com.ippteam.fish.dao.nosql.mongodb.FishingDao;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.entity.nosql.mongodb.Location;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -34,14 +33,14 @@ public class Dao {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         FileDao fileDao = (FileDao) context.getBean("FileDao");
         File file = new File("/Users/pactera/Desktop/2");
-        String id = fileDao.save(file, null);
+        String id = fileDao.save(new FileInputStream(file), null, "ansheck");
         InputStream inputStream = fileDao.file(id);
 
         byte[] bytes = new byte[1];
         int off = 0;
         while (off >= 0) {
             off = inputStream.read(bytes, 0, 1);
-            System.out.println(bytes[0]);
+            System.out.println(new String(bytes));
         }
     }
 }

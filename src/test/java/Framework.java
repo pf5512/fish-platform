@@ -7,8 +7,15 @@ import com.ippteam.fish.entity.User;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.entity.nosql.mongodb.Location;
 import com.ippteam.fish.service.AuthCodeService;
-import com.ippteam.fish.service.FishingServise;
+import com.ippteam.fish.service.FishingService;
 import com.ippteam.fish.service.UserServiceImpl;
+import com.mongodb.DB;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSFile;
+import com.mongodb.gridfs.GridFSInputFile;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,10 +24,16 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import redis.clients.jedis.ShardedJedis;
 import redis.clients.jedis.ShardedJedisPool;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,5 +110,33 @@ public class Framework {
     public void mongo() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         MongoTemplate mongoTemplate = (MongoTemplate) context.getBean("mongoTemplate");
+        DB db = mongoTemplate.getDb();
+        System.out.println(db.getName());
+        GridFS gridFS = new GridFS(db);
+        File file = new File("/Users/pactera/Gridfs-Test.txt");
+        GridFSInputFile inputFile = gridFS.createFile(file);
+        inputFile.save();
+        DBCursor cursor = gridFS.getFileList();
+
+        while (cursor.hasNext()) {
+            DBObject object = cursor.next();
+            System.out.println(object);
+        }
+    }
+
+    @Test
+    public void gridFsTemplate() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        GridFsTemplate gridFsTemplate = (GridFsTemplate) context.getBean("gridFsTemplate");
+        List<GridFSDBFile> files = gridFsTemplate.find(new Query(new Criteria("filename").is("1")));
+
+        try {
+            File file = new File("/Users/pactera/Desktop/1");
+            InputStream inputStream = new FileInputStream(file);
+            gridFsTemplate.store(inputStream, "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(files.size());
     }
 }
