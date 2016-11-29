@@ -1,7 +1,6 @@
 package com.ippteam.fish.service;
 
 import com.ippteam.fish.entity.User;
-import sun.jvm.hotspot.types.basic.BasicOopField;
 
 /**
  * Created by pactera on 16/10/24.
