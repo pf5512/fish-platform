@@ -3,7 +3,6 @@ package com.ippteam.fish.util;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.*;
-import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 
 /**
  * Created by pactera on 16/11/1.

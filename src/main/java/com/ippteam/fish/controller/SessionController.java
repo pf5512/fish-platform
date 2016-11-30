@@ -38,7 +38,7 @@ public class SessionController extends BaseController {
             throw new BusinessException(BusinessStatus.USERNAME_OR_PASSWORD_INVALID);
         }
 
-        String token = authenticationService.certificate(user);
+        String token = authenticationService.certificate(user.getId().toString());
         if (!Verify.string(token)) {
             throw new BusinessException(BusinessStatus.UNKNOWN_ERROR);
         }

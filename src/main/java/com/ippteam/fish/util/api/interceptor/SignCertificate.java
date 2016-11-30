@@ -49,28 +49,36 @@ public class SignCertificate extends HandlerInterceptorAdapter {
             logger.debug(SIGN_FAIL_APPKEY_OR_SIGN_NULL);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-
+        // 获取appkey对应的秘钥
         String securityKey = developerService.getSecurityKeyByAppkey(appkey);
         if (!Verify.string(securityKey)) {
             logger.debug(SIGN_FAIL_APPKEY_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-        // 加密过的
-        byte[] encryptedBuff = Convert.parseHexStr2Byte(signEncrypt);
-        if (!Verify.buffer(encryptedBuff)) {
-            logger.debug(SIGN_FAIL_SIGN_INVALID);
+        // 将sign字符串转换为bytes
+        byte[] encryptedBuff;
+        try {
+            encryptedBuff = Convert.parseHexStr2Byte(signEncrypt);
+            if (!Verify.buffer(encryptedBuff)) {
+                logger.debug(SIGN_FAIL_SIGN_INVALID);
+                throw new CertificationException(EXCEPTION_SIGN_FAIL);
+            }
+        } catch (IllegalArgumentException e) {
+            logger.debug(SIGN_FAIL_SIGN_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-        // 原文buff
+        // 解密
         byte[] decryptedBuff = AES.decrypt(encryptedBuff, securityKey);
         if (!Verify.buffer(decryptedBuff)) {
             logger.debug(SIGN_FAIL_SIGN_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-
+        // 实例化Sign对象
         String signDecrypt = new String(decryptedBuff);
         Sign sign = JSON.parse(signDecrypt, Sign.class);
         logger.info(signDecrypt);
+
+        request.setAttribute("sign", sign);
 
         if (!verifyExpiredTime(sign.getExpiredTime())) {
             logger.debug(SIGN_FAIL_TIMEOUT);
@@ -140,6 +148,11 @@ public class SignCertificate extends HandlerInterceptorAdapter {
      * @return
      */
     private boolean verifyBody(HttpServletRequest request, Object body) throws Exception {
+        String contentType = request.getContentType();
+        if (contentType == null && body == null) return true;
+        if (contentType.contains("multipart/form-data")) return true;
+        if (body == null) return false;
+
         BufferedReader br = request.getReader();
         String line = null;
         StringBuilder sb = new StringBuilder();
@@ -193,7 +206,7 @@ public class SignCertificate extends HandlerInterceptorAdapter {
             }
         }
 
-       return authenticationService.verify(token);
+        return authenticationService.verify(token);
     }
 
     @Override

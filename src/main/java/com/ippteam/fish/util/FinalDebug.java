@@ -9,6 +9,7 @@ public class FinalDebug {
 
     static public final String SIGN_FAIL_APPKEY_OR_SIGN_NULL = "appkey or sign is null.";
     static public final String SIGN_FAIL_APPKEY_INVALID = "appkey is invalid.";
+    static public final String SIGN_FAIL_SIGN_ERROR = "sign error.";
     static public final String SIGN_FAIL_SIGN_INVALID = "sign invalid.";
     static public final String SIGN_FAIL_TIMEOUT = "expiredTime timeout.";
     static public final String SIGN_FAIL_API_ERROR = "api error.";

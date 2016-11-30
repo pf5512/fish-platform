@@ -14,18 +14,18 @@ public class Session {
     public static Credential login(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
         Credential credential = new Credential(user.getId());
-        session.setAttribute(Final.KEY_CREDENTIAL, credential);
+        session.setAttribute("credential", credential);
         return credential;
     }
 
     public static Credential demand(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Credential credential = (Credential) session.getAttribute(Final.KEY_CREDENTIAL);
+        Credential credential = (Credential) session.getAttribute("credential");
         return credential;
     }
 
     public static void logout(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
-        session.removeAttribute(Final.KEY_CREDENTIAL);
+        session.removeAttribute("credential");
     }
 }

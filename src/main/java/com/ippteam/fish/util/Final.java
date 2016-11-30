@@ -17,8 +17,8 @@ public class Final {
     public static final String REG_WAY_PHONE = "phone";
     public static final String REG_WAY_USERNAME = "username";
 
-    // 登陆凭证
-    public static final String KEY_CREDENTIAL = "credential";
+    // key
+    public static final String REQUEST_ATTRIBUTE_SIGN = "sign";
 
     // 非业务异常
     public static final String EXCEPTION_REQUEST_URL_PARAMER_ERROE = "required request url paramer is error.";
