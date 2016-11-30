@@ -9,10 +9,6 @@ import java.io.IOException;
  */
 public class RequestReplacedFilter implements Filter {
 
-    public void init(FilterConfig filterConfig) throws ServletException {
-        //Do nothing
-    }
-
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ServletRequest requestWrapper = null;
         if (request instanceof HttpServletRequest) {
@@ -23,9 +19,5 @@ public class RequestReplacedFilter implements Filter {
         } else {
             chain.doFilter(requestWrapper, response);
         }
-    }
-
-    public void destroy() {
-        //Do nothing
     }
 }
