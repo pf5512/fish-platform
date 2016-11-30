@@ -2,10 +2,8 @@ package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.Login;
-import com.ippteam.fish.util.Session;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
-import com.ippteam.fish.util.api.pojo.Credential;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.exception.*;
 import com.ippteam.fish.util.api.version.ApiVersion;
@@ -39,7 +37,11 @@ public class SessionController extends BaseController {
         if (user == null) {
             throw new BusinessException(BusinessStatus.USERNAME_OR_PASSWORD_INVALID);
         }
-        Credential credential = Session.login(request, user);
-        return new Result(0, null, credential.getToken());
+
+        String token = authenticationService.certificate(user);
+        if (!Verify.string(token)) {
+            throw new BusinessException(BusinessStatus.UNKNOWN_ERROR);
+        }
+        return new Result(0, null, token);
     }
 }

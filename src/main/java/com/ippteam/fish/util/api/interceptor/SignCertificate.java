@@ -1,8 +1,8 @@
 package com.ippteam.fish.util.api.interceptor;
 
+import com.ippteam.fish.service.AuthenticationServiceImpl;
 import com.ippteam.fish.service.DeveloperService;
 import com.ippteam.fish.util.*;
-import com.ippteam.fish.util.api.pojo.Credential;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.api.exception.CertificationException;
@@ -25,12 +25,14 @@ import static com.ippteam.fish.util.FinalDebug.*;
  * Created by pactera on 16/10/28.
  * 验证Sign是够合法
  */
-public class CertificaInterceptor extends HandlerInterceptorAdapter {
+public class SignCertificate extends HandlerInterceptorAdapter {
 
     @Autowired
     DeveloperService developerService;
+    @Autowired
+    AuthenticationServiceImpl authenticationService;
 
-    private static Logger logger = Logger.getLogger(CertificaInterceptor.class);
+    private static Logger logger = Logger.getLogger(SignCertificate.class);
 
     /**
      * @param request
@@ -190,17 +192,8 @@ public class CertificaInterceptor extends HandlerInterceptorAdapter {
                 return true;
             }
         }
-        Credential credential = Session.demand(request);
-        if (credential == null) {
-            return false;
-        } else {
-            if (credential.isValid() && credential.getToken().equals(token)) {
-                return true;
-            } else {
-                request.getSession().removeAttribute(Final.KEY_CREDENTIAL);
-                return false;
-            }
-        }
+
+       return authenticationService.verify(token);
     }
 
     @Override

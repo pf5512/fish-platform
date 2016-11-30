@@ -1,6 +1,6 @@
 package com.ippteam.fish.service;
 
-import com.ippteam.fish.dao.nosql.redis.Redis;
+import com.ippteam.fish.dao.nosql.redis.RedisDao;
 import com.ippteam.fish.util.Random;
 import com.ippteam.fish.util.email.EmailInfo;
 import com.ippteam.fish.util.email.ServerInfo;
@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 public class AuthCodeServiceImpl implements AuthCodeService {
 
     @Autowired
-    Redis redis;
+    RedisDao redisDao;
 
 
     private String redisKey(String authCode) {
@@ -29,15 +29,19 @@ public class AuthCodeServiceImpl implements AuthCodeService {
         return "auth_code_" + authCode;
     }
 
+    private long newAuthCode() {
+        return Random._6Number();
+    }
+
     public boolean generate(String account) throws UnsupportedEncodingException, MessagingException {
         long authCode = 0;
         String key;
         int count = 0;
         do {
-            authCode = Random._6Number();
+            authCode = newAuthCode();
             key = redisKey(authCode);
-            if (!redis.exists(key)) {
-                if (redis.set(key, account, 5 * 60)) {
+            if (!redisDao.exists(key)) {
+                if (redisDao.set(key, account, 5 * 60)) {
                     ServerInfo serverInfo = new ServerInfo();
                     serverInfo.setServerHost("smtp.163.com");
                     serverInfo.setUserName("ansheck@163.com");
@@ -58,14 +62,14 @@ public class AuthCodeServiceImpl implements AuthCodeService {
 
     public boolean verify(String authCode, String account) {
         String key = redisKey(authCode);
-        if (!redis.exists(key)) return false;
+        if (!redisDao.exists(key)) return false;
 
-        String result = redis.get(key);
+        String result = redisDao.get(key);
         return result.equals(account);
     }
 
     public boolean delete(String authCode) {
         String key = redisKey(authCode);
-        return redis.del(key);
+        return redisDao.del(key);
     }
 }

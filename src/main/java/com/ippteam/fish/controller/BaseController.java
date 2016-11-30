@@ -1,9 +1,8 @@
 package com.ippteam.fish.controller;
 
+import com.ippteam.fish.service.AuthenticationServiceImpl;
 import com.ippteam.fish.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -13,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 public class BaseController {
     @Autowired
     protected UserService userService;
+
+    @Autowired
+    AuthenticationServiceImpl authenticationService;
 
     public String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");

@@ -14,8 +14,8 @@ import java.util.*;
  */
 
 @Repository("redisDao")
-public class Redis {
-    private static Logger logger = LoggerFactory.getLogger(Redis.class);
+public class RedisDao {
+    private static Logger logger = LoggerFactory.getLogger(RedisDao.class);
 
     @Autowired
     private ShardedJedisPool shardedJedisPool;
