@@ -1,6 +1,6 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.util.api.entity.Result;
+import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.version.ApiVersion;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
