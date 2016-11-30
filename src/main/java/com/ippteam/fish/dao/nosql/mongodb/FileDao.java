@@ -10,9 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
