@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
 import java.util.Map;
 import java.net.*;
 
@@ -29,7 +28,7 @@ public class HTTP {
      * @param body
      */
     public static String doPost(String uri, Map<String, Object> param, String body) throws MalformedURLException, IOException {
-        URL url = new URL(MakeURL(uri, param));
+        URL url = new URL(makeURL(uri, param));
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
         httpURLConnection.setDoInput(true);
@@ -47,12 +46,12 @@ public class HTTP {
     }
 
     public static String doGet(String uri, Map<String, Object> param) throws MalformedURLException, IOException {
-        URL url = new URL(MakeURL(uri, param));
+        URL url = new URL(makeURL(uri, param));
         URLConnection urlConnection = url.openConnection();
         return HTTP.readResponseBody(urlConnection.getInputStream());
     }
 
-    private static String MakeURL(String uri, Map<String, Object> param) {
+    private static String makeURL(String uri, Map<String, Object> param) {
         StringBuffer sb = new StringBuffer();
         sb.append(uri);
 
@@ -73,8 +72,7 @@ public class HTTP {
 
     // 读取输入流中的数据
     private static String readResponseBody(InputStream inputStream) throws IOException {
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(inputStream, "utf-8"));
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
         String inputLine;
         StringBuffer stringBuilder = new StringBuffer();
         while ((inputLine = in.readLine()) != null) {

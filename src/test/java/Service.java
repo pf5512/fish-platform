@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,5 +48,13 @@ public class Service {
         fishing.setLocation(location);
 
         fishingService.add(fishing);
+    }
+
+    @Test
+    public void weather() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        WeatherServiceImpl weatherService = (WeatherServiceImpl) context.getBean("WeatherService");
+        String data = weatherService.weather("绵阳", new Date());
+        System.out.println();
     }
 }

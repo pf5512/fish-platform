@@ -1,7 +1,9 @@
 import com.ippteam.fish.dao.nosql.mongodb.FileDao;
 import com.ippteam.fish.dao.nosql.mongodb.FishingDao;
+import com.ippteam.fish.dao.nosql.mongodb.WeatherDao;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.entity.nosql.mongodb.Location;
+import com.ippteam.fish.entity.nosql.mongodb.Weather;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -9,6 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,5 +45,14 @@ public class Dao {
             off = inputStream.read(bytes, 0, 1);
             System.out.println(new String(bytes));
         }
+    }
+
+    @Test
+    public void weather() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        WeatherDao weatherDao = (WeatherDao) context.getBean("WeatherDao");
+
+        Weather weathers1 = weatherDao.last();
+        System.out.println();
     }
 }

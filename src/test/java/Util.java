@@ -200,20 +200,6 @@ public class Util {
     }
 
     @Test
-    public void loginSign() {
-        Login login = new Login();
-        login.setAccount("ansheck");
-        login.setPassword("123456");
-
-        Sign sign = new Sign();
-        sign.setExpiredTime(System.currentTimeMillis());
-        sign.setApi("/v1/session/login");
-        sign.setBody(login);
-
-        sign(sign);
-    }
-
-    @Test
     public void regNewSign() {
         RegNew regNew = new RegNew();
         regNew.setRegisterWay(RegisterWay.EMAIL);
@@ -226,6 +212,37 @@ public class Util {
         sign.setApi("/v1/user/regnew");
         sign.setBody(regNew);
 
+        sign(sign);
+    }
+
+    @Test
+    public void loginSign() {
+        Login login = new Login();
+        login.setAccount("ansheck@163.com");
+        login.setPassword("123456");
+
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/session/login");
+        sign.setBody(login);
+        sign(sign);
+    }
+
+    @Test
+    public void upload(){
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/file/upload");
+        sign.setToken("0cb9e047458343b790c675c31211e826");
+        sign(sign);
+    }
+
+    @Test
+    public void file(){
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/file/583e8e13e3a15e4ea781c7b1");
+        sign.setToken("0cb9e047458343b790c675c31211e826");
         sign(sign);
     }
 
