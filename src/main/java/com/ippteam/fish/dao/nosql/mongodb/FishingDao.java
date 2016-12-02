@@ -1,16 +1,10 @@
 package com.ippteam.fish.dao.nosql.mongodb;
 
+import com.ippteam.fish.dao.nosql.mongodb.util.MongoBaseDao;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.util.JSON;
 import com.mongodb.*;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -18,26 +12,24 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-import javax.annotation.Resource;
-
 /**
  * Created by isunimp on 16/11/22.
  */
 
 @Repository("FishingDao")
-public class FishingDao extends MongoBaseDao {
-
-    @Autowired
-    MongoTemplate mongoTemplate;
+public class FishingDao extends MongoBaseDao<Fishing> {
 
     public void insert(Fishing fishing) {
+        DBCollection collection = null;
         if (!mongoTemplate.collectionExists(Fishing.class)) {
             mongoTemplate.createCollection(Fishing.class);
             String collectionName = mongoTemplate.getCollectionName(Fishing.class);
-            DBCollection collection = mongoTemplate.getCollection(collectionName);
-            collection.createIndex(new BasicDBObject("location", "2dsphere"));
+            collection = mongoTemplate.getCollection(collectionName);
+            if (collection != null) {
+                collection.createIndex(new BasicDBObject("location", "2dsphere"));
+            }
         }
-        mongoTemplate.insert(fishing);
+        super.insert(fishing);
     }
 
     public void update(Fishing fishing) throws Exception {
@@ -50,10 +42,6 @@ public class FishingDao extends MongoBaseDao {
         Update update = new Update();
         update.set("summary", dbObject);
         mongoTemplate.updateFirst(query, update, Fishing.class);
-    }
-
-    public List<Fishing> all() {
-        return mongoTemplate.find(null, Fishing.class);
     }
 
     public List<Fishing> near(final double longitude, final double latitude, double maxDistance) throws Exception {

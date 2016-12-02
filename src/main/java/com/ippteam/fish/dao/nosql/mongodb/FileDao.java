@@ -1,5 +1,7 @@
 package com.ippteam.fish.dao.nosql.mongodb;
 
+import com.ippteam.fish.dao.nosql.mongodb.util.MongoBaseDao;
+import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.util.Fix;
 import com.mongodb.BasicDBObject;
 import com.mongodb.gridfs.GridFSDBFile;
@@ -10,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Repository;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -18,7 +21,7 @@ import java.util.List;
  */
 
 @Repository("FileDao")
-public class FileDao extends MongoBaseDao {
+public class FileDao extends MongoBaseDao<Fishing> {
 
     @Autowired
     GridFsTemplate gridFsTemplate;
