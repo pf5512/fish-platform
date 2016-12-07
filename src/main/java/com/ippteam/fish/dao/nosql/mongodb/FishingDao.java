@@ -19,28 +19,23 @@ import java.util.*;
 @Repository("FishingDao")
 public class FishingDao extends MongoBaseDao<Fishing> {
 
+    boolean needCreateIndex = true;
+
     public void insert(Fishing fishing) {
-        DBCollection collection = null;
-        if (!mongoTemplate.collectionExists(Fishing.class)) {
-            mongoTemplate.createCollection(Fishing.class);
-            String collectionName = mongoTemplate.getCollectionName(Fishing.class);
-            collection = mongoTemplate.getCollection(collectionName);
-            if (collection != null) {
-                collection.createIndex(new BasicDBObject("location", "2dsphere"));
-            }
+        if (needCreateIndex) {
+            createIndex("location", "2dsphere");
+            needCreateIndex = false;
         }
         super.insert(fishing);
     }
 
     public void update(Fishing fishing) throws Exception {
         Query query = new Query(Criteria.where("_id").is(new ObjectId(fishing.get_id())));
-        DBObject dbObject = BasicDBObjectBuilder.start()
-                .add("summary", fishing.getSummary())
-                .add("adder", fishing.getAdder())
-                .add("location", fishing.getLocation()).get();
 
         Update update = new Update();
-        update.set("summary", dbObject);
+        update.set("summary", fishing.getSummary());
+        update.set("adder", fishing.getAdder());
+        update.set("location", fishing.getLocation());
         mongoTemplate.updateFirst(query, update, Fishing.class);
     }
 

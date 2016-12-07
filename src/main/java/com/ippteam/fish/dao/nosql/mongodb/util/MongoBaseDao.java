@@ -1,10 +1,14 @@
 package com.ippteam.fish.dao.nosql.mongodb.util;
 
+import com.ippteam.fish.entity.nosql.mongodb.Moment;
 import com.ippteam.fish.util.JSON;
+import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DBCollection;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -22,6 +26,8 @@ public abstract class MongoBaseDao<T> {
 
     @Autowired
     public MongoTemplate mongoTemplate;
+    @Autowired
+    protected MappingMongoConverter mappingMongoConverter;
 
     public MongoBaseDao() {
 
@@ -33,21 +39,42 @@ public abstract class MongoBaseDao<T> {
             // MongoBaseDao的派生子类没有指定泛型类型
             throw exception;
         }
-
         JSON.addSerializer(ObjectId.class, new CustomMongoIdSerializer());
     }
 
-    public List<T> all() {
+    protected Query queryById(String id) {
+        return new Query(Criteria.where("_id").is(new ObjectId(id)));
+    }
+
+    protected DBCollection getDBCollection() {
+        DBCollection collection = null;
+        if (!mongoTemplate.collectionExists(entityClass)) {
+            mongoTemplate.createCollection(entityClass);
+        }
+        String collectionName = mongoTemplate.getCollectionName(entityClass);
+        return mongoTemplate.getCollection(collectionName);
+    }
+
+    protected void createIndex(String fieldKey, String indexType) {
+        DBCollection collection = getDBCollection();
+        if (collection != null) {
+            collection.createIndex(new BasicDBObject(fieldKey, indexType));
+        }
+    }
+
+    public List<T> findAll() {
         return mongoTemplate.find(null, entityClass);
+    }
+
+    public T findById(String id) {
+        return mongoTemplate.findOne(queryById(id), entityClass);
     }
 
     public List<T> find(T entity) throws Exception {
         Method[] methods = entityClass.getMethods();
         Field[] fields = entityClass.getDeclaredFields();
 
-        // BasicDBObjectBuilder rootDBObject = BasicDBObjectBuilder.start();
         Criteria criteria = new Criteria();
-
         for (Field field : fields) {
             String name = field.getName();
             if (name.equals("_id")) continue;
@@ -67,7 +94,6 @@ public abstract class MongoBaseDao<T> {
                 criteria.and(name).is(value);
             }
         }
-        System.out.println(new Query(criteria));
         return mongoTemplate.find(new Query(criteria), entityClass);
     }
 
