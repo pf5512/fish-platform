@@ -24,6 +24,7 @@ public class Final {
     public static final String EXCEPTION_REQUEST_URL_PARAMER_ERROE = "required request url paramer is error.";
     public static final String EXCEPTION_REQUEST_BODY_PARAMER_ERROE = "required request body paramer is error.";
     public static final String EXCEPTION_REQUEST_PARAMER_INVALID = "required request paramer is invalid.";
+    public static final String EXCEPTION_REQUEST_ID_INVALID = "required request id is invalid.";
     public static final String EXCEPTION_REQUEST_METHOD_NOTSUPPORTED = "Request method not supported or Request not found.";
     public static final String EXCEPTION_UNKNOWN_EXCEPTION = "unknown exception.";
     public static final String EXCEPTION_SIGN_FAIL = "sign fail.";
