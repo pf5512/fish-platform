@@ -23,9 +23,9 @@ public class Util {
     }
 
     @Test
-    public void AES() {
+    public void AES() throws Exception {
         String content = "test";
-        String password = "12345678";
+        String password = "0e5b78c1ff6f4ed4";
         System.out.println("加密前：" + content);
         byte[] encryptResult = AES.encrypt(content, password);
         System.out.println(Convert.parseByte2HexStr(encryptResult));
