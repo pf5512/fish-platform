@@ -42,17 +42,20 @@ public class SignCertificate extends HandlerInterceptorAdapter {
      * @throws Exception
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+        String ip = getIpAddr(request);
+        String uri = request.getRequestURI();
+        String logBase = String.format("[%s  %s] ", ip, uri);
         String appkey = request.getParameter("appkey");
         String signEncrypt = request.getParameter("sign");
 
         if (!Verify.string(appkey) || !Verify.string(signEncrypt)) {
-            logger.debug(SIGN_FAIL_APPKEY_OR_SIGN_NULL);
+            logger.info(logBase + SIGN_FAIL_APPKEY_OR_SIGN_NULL);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 获取appkey对应的秘钥
         String securityKey = developerService.getSecurityKeyByAppkey(appkey);
         if (!Verify.string(securityKey)) {
-            logger.debug(SIGN_FAIL_APPKEY_INVALID);
+            logger.info(logBase + SIGN_FAIL_APPKEY_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 将sign字符串转换为bytes
@@ -60,43 +63,46 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         try {
             encryptedBuff = Convert.parseHexStr2Byte(signEncrypt);
             if (!Verify.buffer(encryptedBuff)) {
-                logger.debug(SIGN_FAIL_SIGN_INVALID);
+                logger.info(logBase + SIGN_FAIL_SIGN_CONVERT_BUFFER_FAIL);
                 throw new CertificationException(EXCEPTION_SIGN_FAIL);
             }
         } catch (IllegalArgumentException e) {
-            logger.debug(SIGN_FAIL_SIGN_ERROR);
+            logger.info(logBase + SIGN_FAIL_SIGN_CONVERT_BUFFER_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 解密
         byte[] decryptedBuff = AES.decrypt(encryptedBuff, securityKey);
         if (!Verify.buffer(decryptedBuff)) {
-            logger.debug(SIGN_FAIL_SIGN_INVALID);
+            logger.info(logBase + SIGN_FAIL_SIGN_BUFFER_DECRYPTED_FAIL);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         // 实例化Sign对象
         String signDecrypt = new String(decryptedBuff);
         Sign sign = JSON.parse(signDecrypt, Sign.class);
-        logger.info(signDecrypt);
 
         request.setAttribute("sign", sign);
 
         if (!verifyExpiredTime(sign.getExpiredTime())) {
-            logger.debug(SIGN_FAIL_TIMEOUT);
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_TIMEOUT);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         if (!verifyApi(request, sign.getApi())) {
-            logger.debug(SIGN_FAIL_API_ERROR);
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_API_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         if (!verifyBody(request, sign.getBody())) {
-            logger.debug(SIGN_FAIL_BODY_ERROR);
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_BODY_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
         if (!verifyToken(request, sign.getToken())) {
-            logger.debug(SIGN_FAIL_TOKEN_INVALID);
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_TOKEN_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
         return true;
@@ -217,5 +223,19 @@ public class SignCertificate extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         super.afterCompletion(request, response, handler, ex);
+    }
+
+    private String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }
