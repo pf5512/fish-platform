@@ -153,6 +153,7 @@ public class SignCertificate extends HandlerInterceptorAdapter {
      */
     private boolean verifyBody(HttpServletRequest request, Object body) throws Exception {
         String contentType = request.getContentType();
+        if (request.getMethod().equals("GET")) return true;
         if (contentType == null && body == null) return true;
         if (contentType.contains("multipart/form-data")) return true;
         if (body == null) return false;
