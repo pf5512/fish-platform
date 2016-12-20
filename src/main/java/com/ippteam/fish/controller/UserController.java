@@ -91,15 +91,14 @@ public class UserController extends BaseController {
                 break;
             }
             case PHONE: {
-                throw new BusinessException(BusinessStatus.UNDER_CONSTRUCTING_REGNEW_PHONE);
-//                if (!Verify.phone(account)) {
-//                    throw new BusinessException(BusinessStatus.PHONE_INVALID);
-//                }
-//                if (userService.getUserByPhone(account) != null) {
-//                    throw new BusinessException(BusinessStatus.PHONE_EXISTING);
-//                }
-//                u.setPhone(account);
-//                u.setRegisterWay(REG_WAY_PHONE);
+                if (!Verify.phone(account)) {
+                    throw new BusinessException(BusinessStatus.PHONE_INVALID);
+                }
+                if (userService.getUserByPhone(account) != null) {
+                    throw new BusinessException(BusinessStatus.PHONE_EXISTING);
+                }
+                u.setPhone(account);
+                u.setRegisterWay(REG_WAY_PHONE);
             }
         }
         User user = userService.register(u);

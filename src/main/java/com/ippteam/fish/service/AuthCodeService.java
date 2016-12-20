@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
  */
 public interface AuthCodeService {
 
-    public boolean generate(String account) throws UnsupportedEncodingException, MessagingException;
+    public long generate(String account);
 
     public boolean verify(String authCode, String account);
 

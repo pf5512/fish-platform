@@ -33,7 +33,7 @@ public class AuthCodeServiceImpl implements AuthCodeService {
         return Random._6Number();
     }
 
-    public boolean generate(String account) throws UnsupportedEncodingException, MessagingException {
+    public long generate(String account) {
         long authCode = 0;
         String key;
         int count = 0;
@@ -42,22 +42,11 @@ public class AuthCodeServiceImpl implements AuthCodeService {
             key = redisKey(authCode);
             if (!redisDao.exists(key)) {
                 if (redisDao.set(key, account, 5 * 60)) {
-                    ServerInfo serverInfo = new ServerInfo();
-                    serverInfo.setServerHost("smtp.163.com");
-                    serverInfo.setUserName("ansheck@163.com");
-                    serverInfo.setPassword("renguiquanyy1");
-                    serverInfo.setNick("Fish Service");
-                    UserAgent userAgent = new UserAgent(serverInfo);
-                    EmailInfo emailInfo = new EmailInfo();
-                    emailInfo.setSubject("你正在注册Fish");
-                    emailInfo.setContent("验证码：" + Long.toString(authCode));
-                    emailInfo.setToAddress(account);
-                    userAgent.sendHtmlMail(emailInfo);
-                    return true;
+                    return authCode;
                 }
             }
         } while (++count < 3);
-        return false;
+        return 0;
     }
 
     public boolean verify(String authCode, String account) {
