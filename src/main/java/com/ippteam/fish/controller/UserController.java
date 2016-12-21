@@ -2,6 +2,7 @@ package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.RegNew;
+import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Convert;
 import com.ippteam.fish.util.Session;
@@ -52,10 +53,12 @@ public class UserController extends BaseController {
             throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
 
-        if (!authCodeService.verify(authCode, account)) {
-            throw new BusinessException(AUTHCODE_INVALID);
+        if (regNew.getRegisterWay() != RegisterWay.USERNAME) {
+            if (!authCodeService.verify(authCode, account)) {
+                throw new BusinessException(AUTHCODE_INVALID);
+            }
+            authCodeService.delete(authCode);
         }
-        authCodeService.delete(authCode);
 
         String IPString = this.getIpAddr(request);
         Integer ipInt = (int) Convert.ipToLong(IPString);
