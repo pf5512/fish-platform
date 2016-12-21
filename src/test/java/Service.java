@@ -3,6 +3,7 @@ import com.ippteam.fish.entity.User;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
 import com.ippteam.fish.entity.nosql.mongodb.Location;
 import com.ippteam.fish.service.*;
+import com.ippteam.fish.util.JSON;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -10,6 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by isunimp on 16/11/23.
@@ -55,6 +57,7 @@ public class Service {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         WeatherServiceImpl weatherService = (WeatherServiceImpl) context.getBean("WeatherService");
         String data = weatherService.weather("绵阳", new Date());
+        Map map = JSON.parse(data, Map.class);
         System.out.println();
     }
 }
