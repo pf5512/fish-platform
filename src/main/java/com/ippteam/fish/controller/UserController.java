@@ -5,12 +5,12 @@ import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Convert;
-import com.ippteam.fish.util.Session;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
 import com.ippteam.fish.util.api.pojo.Credential;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.exception.*;
+import com.ippteam.fish.util.api.pojo.Sign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +33,17 @@ public class UserController extends BaseController {
 
     @Autowired
     AuthCodeService authCodeService;
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public Result user(HttpServletRequest request) {
+        Sign sign = (Sign) request.getAttribute(REQUEST_ATTRIBUTE_SIGN);
+        String token = sign.getToken();
+        String id = authenticationService.getIdentify(token);
+        User u = userService.getUserById(Integer.parseInt(id));
+        return new Result(0, null, u);
+    }
 
     @ApiVersion(1)
     @ResponseBody
@@ -108,8 +119,8 @@ public class UserController extends BaseController {
         if (user == null) {
             throw new BusinessException(UNKNOWN_ERROR);
         }
-        Credential credential = Session.login(request, user);
-        return new Result(0, null, credential.getToken());
+        String token = authenticationService.certificate(user.getId().toString());
+        return new Result(0, null, token);
     }
 
     @ApiVersion(1)
