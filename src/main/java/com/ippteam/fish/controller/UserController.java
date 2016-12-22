@@ -3,11 +3,12 @@ package com.ippteam.fish.controller;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
+import com.ippteam.fish.pojo.UserUpdate;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Convert;
+import com.ippteam.fish.util.Reflection;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
-import com.ippteam.fish.util.api.pojo.Credential;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.exception.*;
 import com.ippteam.fish.util.api.pojo.Sign;
@@ -37,20 +38,24 @@ public class UserController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public Result user(HttpServletRequest request) {
+    public Result user(HttpServletRequest request) throws Exception {
         Sign sign = (Sign) request.getAttribute(REQUEST_ATTRIBUTE_SIGN);
         String token = sign.getToken();
         String id = authenticationService.getIdentify(token);
-        User u = userService.getUserById(Integer.parseInt(id));
-        return new Result(0, null, u);
+        User user = userService.getUserById(Integer.parseInt(id));
+        UserUpdate userUpdate = new UserUpdate();
+        Reflection.objectValueTransfer(userUpdate, user, true);
+        return new Result(0, null, userUpdate);
     }
 
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Result user(@PathVariable(value = "id") Integer id) {
-        User u = userService.getUserById(id);
-        return new Result(0, null, u);
+    public Result user(@PathVariable(value = "id") Integer id) throws Exception {
+        User user = userService.getUserById(id);
+        UserUpdate userUpdate = new UserUpdate();
+        Reflection.objectValueTransfer(userUpdate, user, true);
+        return new Result(0, null, userUpdate);
     }
 
     @ApiVersion(1)
@@ -122,6 +127,19 @@ public class UserController extends BaseController {
         String token = authenticationService.certificate(user.getId().toString());
         return new Result(0, null, token);
     }
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Result update(@RequestBody UserUpdate userUpdate, HttpServletRequest request) throws Exception {
+        Integer id = this.getUserId(request);
+        User user = userService.getUserById(id);
+        Reflection.objectValueTransfer(user, userUpdate, true);
+        user.setUpdateTime(new Date());
+        userService.update(user);
+        return new Result(0, null, userService.getUserById(id));
+    }
+
 
     @ApiVersion(1)
     @ResponseBody

@@ -1,20 +1,24 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.Login;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
+import com.ippteam.fish.pojo.UserUpdate;
 import com.ippteam.fish.util.*;
+import com.ippteam.fish.util.Random;
 import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.email.*;
 import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.bson.*;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Util {
     @Test
@@ -31,11 +35,42 @@ public class Util {
         System.out.println(Convert.parseByte2HexStr(encryptResult));
         byte[] decryptResult = AES.decrypt(encryptResult, password);
         System.out.println("解密后：" + new String(decryptResult));
+
+
+        String s = "2525b1d6c02f870372b8aea4513e4d5e7913a7bc4978e3d2da7ad984b538e19c91e5f8ca435587a78bfb46086c035b9a915b85d209a125f24e90bbcf80ac812416b82184f15f102710ab9912dd2e62a6e0f22ae36ba5fa091cf53acdd205f8e580f3228768c259ae64367e9c9a411bac";
+        byte[] bytes = Convert.parseHexStr2Byte(s);
+        byte[] bytes1 = AES.decrypt(bytes, password);
+        System.out.println(new String(bytes1));
+
+
     }
 
     @Test
-    public void Base64() {
+    public void Base64() throws Exception {
 
+        String host = "http://www.qf106.com";
+        String path = "/sms.aspx";
+        String method = "GET";
+
+        Map<String, String> headers = new HashMap<String, String>();
+
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("userid", "14960");
+        querys.put("account", "tz112");
+        querys.put("password", "we1234");
+        querys.put("mobile", "18190910728");
+        querys.put("content", Long.toString(123456));
+        querys.put("sendTime", null);
+        querys.put("action", "send");
+        querys.put("checkcontent", "0");
+        querys.put("taskName", null);
+        querys.put("countnumber", "1");
+        querys.put("mobilenumber", "1");
+        querys.put("telephonenumber", "0");
+
+        HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+        String XMLString = EntityUtils.toString(response.getEntity());
+        System.out.println(XMLString);
     }
 
     @Test
@@ -186,7 +221,7 @@ public class Util {
     }
 
     public void sign(Sign sign) {
-        String securityKey = "0e5b78c1ff6f4ed4a169fea3d3eda528";
+        String securityKey = "0e5b78c1ff6f4ed4";
         try {
             String signString = JSON.stringify(sign);
             byte[] buff = AES.encrypt(signString, securityKey);
@@ -229,7 +264,7 @@ public class Util {
     }
 
     @Test
-    public void upload(){
+    public void upload() {
         Sign sign = new Sign();
         sign.setExpiredTime(System.currentTimeMillis());
         sign.setApi("/v1/file/upload");
@@ -238,7 +273,7 @@ public class Util {
     }
 
     @Test
-    public void file(){
+    public void file() {
         Sign sign = new Sign();
         sign.setExpiredTime(System.currentTimeMillis());
         sign.setApi("/v1/file/583e8e13e3a15e4ea781c7b1");
@@ -255,9 +290,20 @@ public class Util {
     }
 
     @Test
-    public void test() {
-        String ipStr = "127.0.0.1";
-        long ipLong = Convert.ipToLong(ipStr);
-        System.out.println(Convert.longToIP(0));
+    public void test() throws Exception {
+        User user = new User();
+        user.setId(1);
+        user.setGender("男");
+        UserUpdate userUpdate = new UserUpdate();
+        userUpdate.setNikeName("12");
+        userUpdate.setFullName("任贵权");
+        userUpdate.setIcon("www.baidu.com");
+        userUpdate.setBirthdate(new Date());
+        userUpdate.setQq(137858649);
+        userUpdate.setWeibo("isunimp");
+
+        Reflection.objectValueTransfer(user, userUpdate, true);
+
+        System.out.println();
     }
 }
