@@ -42,10 +42,6 @@
 
         <!--对应数据库表名 -->
         <table tableName="user">
-
-        </table>
-        <table tableName="developer">
-            <property name="domainObjectName" value="Developer"/>
         </table>
     </context>
 </generatorConfiguration>
