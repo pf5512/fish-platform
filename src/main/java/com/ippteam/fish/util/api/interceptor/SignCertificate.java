@@ -3,6 +3,7 @@ package com.ippteam.fish.util.api.interceptor;
 import com.ippteam.fish.service.AuthenticationServiceImpl;
 import com.ippteam.fish.service.DeveloperService;
 import com.ippteam.fish.util.*;
+import com.ippteam.fish.util.api.exception.BusinessException;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.api.exception.CertificationException;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import static com.ippteam.fish.util.Final.*;
 import static com.ippteam.fish.util.FinalDebug.*;
+import static com.ippteam.fish.util.api.BusinessStatus.TOKEN_INVALID;
 
 /**
  * Created by pactera on 16/10/28.
@@ -103,7 +105,7 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         if (!verifyToken(request, sign.getToken())) {
             logger.info(logBase + signDecrypt);
             logger.info(logBase + SIGN_FAIL_TOKEN_INVALID);
-            throw new CertificationException(EXCEPTION_SIGN_FAIL);
+            throw new BusinessException(TOKEN_INVALID);
         }
         return true;
     }
