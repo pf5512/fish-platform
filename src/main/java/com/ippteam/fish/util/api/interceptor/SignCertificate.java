@@ -107,6 +107,8 @@ public class SignCertificate extends HandlerInterceptorAdapter {
             logger.info(logBase + SIGN_FAIL_TOKEN_INVALID);
             throw new BusinessException(TOKEN_INVALID);
         }
+
+        authenticationService.flushValidity(sign.getToken());
         return true;
     }
 

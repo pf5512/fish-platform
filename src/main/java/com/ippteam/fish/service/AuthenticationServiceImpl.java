@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 @Service("AuthenticationService")
 public class AuthenticationServiceImpl {
 
+    // 有效期 10 天
+    final Integer validity = 10 * 24 * 60 * 60;
+
     @Autowired
     RedisDao redisDao;
 
@@ -26,7 +29,6 @@ public class AuthenticationServiceImpl {
     }
 
     /**
-     *
      * 添加认证
      * 认证有效期10天
      *
@@ -41,7 +43,7 @@ public class AuthenticationServiceImpl {
             token = newToken();
             key = redisKey(token);
             if (!redisDao.exists(key)) {
-                if (redisDao.set(key, identify, 10 * 24 * 60 * 60)) {
+                if (redisDao.set(key, identify, validity)) {
                     return token;
                 }
             }
@@ -50,7 +52,6 @@ public class AuthenticationServiceImpl {
     }
 
     /**
-     *
      * 获取标识
      *
      * @param token 凭证
@@ -63,7 +64,6 @@ public class AuthenticationServiceImpl {
     }
 
     /**
-     *
      * 验证凭证是否有效
      *
      * @param token token
@@ -73,5 +73,15 @@ public class AuthenticationServiceImpl {
         String key = redisKey(token);
         String identify = redisDao.get(key);
         return identify != null && identify.length() > 0;
+    }
+
+    /**
+     * 更新token有效期
+     *
+     * @param token
+     */
+    public void flushValidity(String token) {
+        String key = redisKey(token);
+        redisDao.expire(key, validity);
     }
 }
