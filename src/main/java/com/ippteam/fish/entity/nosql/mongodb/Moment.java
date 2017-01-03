@@ -39,6 +39,8 @@ public class Moment {
     // 评论
     List<Comment> comments;
 
+    boolean display = true;
+
     // 距离（仅查询时有用）
     double distance;
 
@@ -128,5 +130,13 @@ public class Moment {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public boolean isDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
     }
 }

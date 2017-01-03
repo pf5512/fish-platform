@@ -27,6 +27,10 @@ public class Fishing {
 
     Location location;
 
+    List<String> photos;
+
+    boolean display = true;
+
     public String get_id() {
         return _id;
     }
@@ -57,5 +61,21 @@ public class Fishing {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
+
+    public boolean isDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
     }
 }

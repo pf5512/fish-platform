@@ -19,6 +19,8 @@ public class Comment {
     // 评论时间
     Date date;
 
+    boolean display = true;
+
     public String getContent() {
         return content;
     }
@@ -49,5 +51,13 @@ public class Comment {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isDisplay() {
+        return display;
+    }
+
+    public void setDisplay(boolean display) {
+        this.display = display;
     }
 }
