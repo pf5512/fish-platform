@@ -42,8 +42,10 @@ public class MomentDao extends MongoBaseDao<Moment> {
                     if (obj instanceof BasicDBObject) {
                         BasicDBObject basicDBObject = (BasicDBObject) obj;
                         Moment moment = JSON.parse(basicDBObject.get("obj"), Moment.class);
-                        moment.setDistance((Double) basicDBObject.get("dis"));
-                        moments.add(moment);
+                        if (moment.isDisplay()) {
+                            moment.setDistance((Double) basicDBObject.get("dis"));
+                            moments.add(moment);
+                        }
                     }
                 }
             }

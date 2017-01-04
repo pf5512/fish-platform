@@ -58,6 +58,7 @@ public class FishingDao extends MongoBaseDao<Fishing> {
         location.put("$near", near);
 
         BasicDBObject conditionBbject = new BasicDBObject("location", location);
+        conditionBbject.append("display", true);
 
         DBCursor cursor = collection.find(conditionBbject);
         List<Fishing> fishings = new ArrayList<Fishing>();
