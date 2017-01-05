@@ -5,7 +5,7 @@ import com.ippteam.fish.entity.User;
 /**
  * Created by pactera on 16/10/24.
  */
-public interface UserService {
+public interface UserService extends BaseService {
 
     User getUserById(Integer id);
 

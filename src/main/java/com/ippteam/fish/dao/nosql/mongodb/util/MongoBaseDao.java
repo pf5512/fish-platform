@@ -99,7 +99,6 @@ public abstract class MongoBaseDao<T> {
 
     /**
      * 插入一个文档对象
-     * 如果文档所属的集合不存在，则自动创建，并返回集合，便于添加索引之类的操作
      * 如果文档所属的集合已经存在，则返回null
      *
      * @param entity 文档对象

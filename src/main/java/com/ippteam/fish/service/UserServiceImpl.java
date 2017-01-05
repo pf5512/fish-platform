@@ -19,7 +19,7 @@ import static com.ippteam.fish.util.Final.*;
  */
 
 @Service("UserService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userDao;

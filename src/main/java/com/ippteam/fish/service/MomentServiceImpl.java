@@ -12,7 +12,7 @@ import java.util.List;
  * Created by isunimp on 16/12/6.
  */
 @Service("MomentService")
-public class MomentServiceImpl {
+public class MomentServiceImpl extends BaseServiceImpl {
 
     @Autowired
     MomentDao momentDao;
