@@ -1,11 +1,12 @@
 package com.ippteam.fish.service;
 
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.service.util.ReportService;
 
 /**
  * Created by pactera on 16/10/24.
  */
-public interface UserService extends BaseService {
+public interface UserService extends ReportService {
 
     User getUserById(Integer id);
 

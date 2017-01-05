@@ -4,8 +4,8 @@ import com.ippteam.fish.controller.UserController;
 import com.ippteam.fish.dao.UserMapper;
 import com.ippteam.fish.entity.*;
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.service.util.ReportServiceImpl;
 import com.ippteam.fish.util.Fix;
-import com.ippteam.fish.util.api.exception.ParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import static com.ippteam.fish.util.Final.*;
  */
 
 @Service("UserService")
-public class UserServiceImpl extends BaseServiceImpl implements UserService {
+public class UserServiceImpl extends ReportServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userDao;
@@ -107,5 +107,9 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
         Integer id = user.getId();
         userDao.updateByPrimaryKey(user);
         return userDao.selectByPrimaryKey(id);
+    }
+
+    public void banned(String id) {
+
     }
 }

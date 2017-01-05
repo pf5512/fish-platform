@@ -4,7 +4,6 @@ import com.ippteam.fish.dao.nosql.mongodb.FileDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.InputStream;
 
 /**

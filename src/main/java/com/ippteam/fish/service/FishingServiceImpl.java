@@ -2,6 +2,7 @@ package com.ippteam.fish.service;
 
 import com.ippteam.fish.dao.nosql.mongodb.FishingDao;
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
+import com.ippteam.fish.service.util.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by isunimp on 16/11/23.
  */
 @Service("FishingService")
-public class FishingServiceImpl extends BaseServiceImpl implements FishingService {
+public class FishingServiceImpl extends ReportServiceImpl implements FishingService {
 
     @Autowired
     FishingDao fishingDao;

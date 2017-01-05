@@ -1,13 +1,14 @@
 package com.ippteam.fish.service;
 
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
+import com.ippteam.fish.service.util.ReportService;
 
 import java.util.List;
 
 /**
  * Created by isunimp on 16/11/23.
  */
-public interface FishingService extends BaseService {
+public interface FishingService extends ReportService {
 
     void add(Fishing fishing);
 
