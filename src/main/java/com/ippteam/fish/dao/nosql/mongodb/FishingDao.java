@@ -29,6 +29,13 @@ public class FishingDao extends MongoBaseDao<Fishing> {
         super.insert(fishing);
     }
 
+    public void banned(String id) {
+        Query query = this.queryById(id);
+        Update update = new Update();
+        update.set("display", false);
+        mongoTemplate.upsert(query, update, Fishing.class);
+    }
+
     public void update(Fishing fishing) throws Exception {
         Query query = new Query(Criteria.where("_id").is(new ObjectId(fishing.get_id())));
 

@@ -35,6 +35,13 @@ public class MomentDao extends MongoBaseDao<Moment> {
         super.insert(moment);
     }
 
+    public void banned(String id) {
+        Query query = this.queryById(id);
+        Update update = new Update();
+        update.set("display", false);
+        mongoTemplate.upsert(query, update, Moment.class);
+    }
+
     public List<Moment> getMoments(final double longitude, final double latitude) throws Exception {
         String command = String.format("{geoNear:\"moment\",near:[%f,%f],spherical:true,distanceMultiplier: 3963.2}", longitude, latitude);
         CommandResult commandResult = mongoTemplate.executeCommand(command);

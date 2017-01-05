@@ -11,7 +11,7 @@ import java.util.List;
  * Created by isunimp on 16/11/23.
  */
 @Service("FishingService")
-public class FishingServiceImpl  extends BaseServiceImpl implements FishingService {
+public class FishingServiceImpl extends BaseServiceImpl implements FishingService {
 
     @Autowired
     FishingDao fishingDao;
@@ -22,5 +22,9 @@ public class FishingServiceImpl  extends BaseServiceImpl implements FishingServi
 
     public List<Fishing> near(final double longitude, final double latitude, double maxDistance) throws Exception {
         return fishingDao.near(longitude, latitude, maxDistance);
+    }
+
+    public void banned(String id) {
+        fishingDao.banned(id);
     }
 }

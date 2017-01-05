@@ -8,4 +8,6 @@ import java.util.List;
 public interface BaseService {
 
     void report(String id, String reason, List<String> evidences) throws Exception;
+
+    void banned(String id);
 }

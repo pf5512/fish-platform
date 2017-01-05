@@ -12,7 +12,7 @@ import java.util.List;
  * Created by isunimp on 16/12/6.
  */
 @Service("MomentService")
-public class MomentServiceImpl extends BaseServiceImpl {
+public class MomentServiceImpl extends BaseServiceImpl implements BaseService {
 
     @Autowired
     MomentDao momentDao;
@@ -35,5 +35,9 @@ public class MomentServiceImpl extends BaseServiceImpl {
 
     public List<Moment> getMoments(final double longitude, final double latitude) throws Exception {
         return momentDao.getMoments(longitude, latitude);
+    }
+
+    public void banned(String id){
+        momentDao.banned(id);
     }
 }
