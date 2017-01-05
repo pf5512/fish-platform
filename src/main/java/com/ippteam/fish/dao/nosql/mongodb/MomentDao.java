@@ -24,6 +24,11 @@ public class MomentDao extends MongoBaseDao<Moment> {
 
     public void insert(Moment moment) {
         if (needCreateIndex) {
+            if (this.mongoTemplate.collectionExists(Moment.class)) {
+                needCreateIndex = false;
+            }
+        }
+        if (needCreateIndex) {
             createIndex("location", "2dsphere");
             needCreateIndex = false;
         }
