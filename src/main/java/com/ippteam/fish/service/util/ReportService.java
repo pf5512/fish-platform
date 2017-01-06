@@ -1,5 +1,7 @@
 package com.ippteam.fish.service.util;
 
+import com.ippteam.fish.entity.nosql.mongodb.Report;
+
 import java.util.List;
 
 /**
@@ -8,17 +10,25 @@ import java.util.List;
 public interface ReportService {
 
     /**
-     *  举报资源
-     * @param id        资源id
-     * @param reason    举报理由
-     * @param evidences 证据
+     * 举报资源
+     *
+     * @param report 举报信息
      * @throws Exception
      */
-    void report(String id, String reason, List<String> evidences) throws Exception;
+    void report(Report report) throws Exception;
 
     /**
-     *  封禁资源
-     * @param id 资源id
+     * 封禁资源
+     *
+     * @param id   举报记录的id
+     * @param toId 被封禁资源的id
      */
-    void banned(String id);
+    void banned(String id, String toId) throws Exception;
+
+    /**
+     * 封禁资源
+     *
+     * @param toId 被封禁资源的id
+     */
+    void banned(String toId);
 }

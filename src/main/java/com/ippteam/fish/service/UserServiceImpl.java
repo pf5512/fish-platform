@@ -1,10 +1,10 @@
 package com.ippteam.fish.service;
 
-import com.ippteam.fish.controller.UserController;
 import com.ippteam.fish.dao.UserMapper;
 import com.ippteam.fish.entity.*;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.service.util.ReportServiceImpl;
+import com.ippteam.fish.service.util.ReportType;
 import com.ippteam.fish.util.Fix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import static com.ippteam.fish.util.Final.*;
 /**
  * Created by pactera on 16/10/24.
  */
-
+@ReportType("USER")
 @Service("UserService")
 public class UserServiceImpl extends ReportServiceImpl implements UserService {
 

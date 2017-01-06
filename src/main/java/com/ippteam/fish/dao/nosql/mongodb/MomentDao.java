@@ -36,6 +36,9 @@ public class MomentDao extends MongoBaseDao<Moment> {
     }
 
     public void banned(String id) {
+        Moment moment = super.findById(id);
+        if (moment == null) return;
+
         Query query = this.queryById(id);
         Update update = new Update();
         update.set("display", false);

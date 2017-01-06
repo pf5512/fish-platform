@@ -5,6 +5,7 @@ import com.ippteam.fish.entity.nosql.mongodb.Comment;
 import com.ippteam.fish.entity.nosql.mongodb.Moment;
 import com.ippteam.fish.service.util.ReportService;
 import com.ippteam.fish.service.util.ReportServiceImpl;
+import com.ippteam.fish.service.util.ReportType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by isunimp on 16/12/6.
  */
+@ReportType("MOMENT")
 @Service("MomentService")
 public class MomentServiceImpl extends ReportServiceImpl implements ReportService {
 

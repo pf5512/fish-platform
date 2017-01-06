@@ -30,6 +30,9 @@ public class FishingDao extends MongoBaseDao<Fishing> {
     }
 
     public void banned(String id) {
+        Fishing fishing = super.findById(id);
+        if (fishing == null) return;
+
         Query query = this.queryById(id);
         Update update = new Update();
         update.set("display", false);

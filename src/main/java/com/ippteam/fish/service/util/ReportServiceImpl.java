@@ -2,9 +2,10 @@ package com.ippteam.fish.service.util;
 
 import com.ippteam.fish.dao.nosql.mongodb.ReportDao;
 import com.ippteam.fish.entity.nosql.mongodb.Report;
-import com.ippteam.fish.entity.nosql.mongodb.ReportType;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -14,27 +15,33 @@ public abstract class ReportServiceImpl implements ReportService {
     @Autowired
     ReportDao reportDao;
 
-    /**
-     * 默认实现（举报资源）
-     * @param id        资源id
-     * @param reason    举报理由
-     * @param evidences 证据
-     * @throws Exception
-     */
-    public void report(String id, String reason, List<String> evidences) throws Exception {
-        ReportType reportType;
-        String clazzName = this.getClass().getSimpleName();
-        if (clazzName.equals("FishingServiceImpl")) {
-            reportType = ReportType.FISHING;
-        } else if (clazzName.equals("MomentServiceImpl")) {
-            reportType = ReportType.MOMENT;
-        } else if (clazzName.equals("UserServiceImpl")) {
-            reportType = ReportType.USER;
-        } else {
-            throw new Exception("this ReportType not support report.");
-        }
+    public void report(Report report) throws Exception {
+        String reportType;
 
-        Report report = new Report(id, reportType, reason, evidences);
+        Class clazz = this.getClass();
+        if (!clazz.isAnnotationPresent(ReportType.class)) {
+            throw new Exception(String.format("%s is no use annotations 'ReportType'.", clazz.getName()));
+        }
+        ReportType annotation = (ReportType) clazz.getAnnotation(ReportType.class);
+        reportType = annotation.value();
+        report.setType(reportType);
         reportDao.insert(report);
+    }
+
+    public void banned(String id, String toId) throws Exception {
+        Class clazz = this.getClass();
+        try {
+            Method method = clazz.getMethod("banned", String.class);
+            method.invoke(this, toId);
+            reportDao.handled(id);
+        } catch (NoSuchMethodException e) {
+
+        } catch (IllegalAccessException e) {
+
+        } catch (IllegalArgumentException e) {
+
+        } catch (InvocationTargetException e) {
+
+        }
     }
 }

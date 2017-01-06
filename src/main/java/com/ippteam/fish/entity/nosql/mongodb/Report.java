@@ -17,8 +17,11 @@ public class Report {
     // 被举报的id
     String toId;
 
+    // 举报者
+    String informant;
+
     // 举报的类型
-    ReportType type;
+    String type;
 
     // 举报原因
     String reason;
@@ -26,9 +29,11 @@ public class Report {
     // 证据截图
     List<String> evidences;
 
-    public Report(String id, ReportType type, String reason, List<String> evidences) {
-        this.setToId(id);
-        this.setType(type);
+    boolean handled = false;
+
+    public Report(String toId, String informant, String reason, List<String> evidences) {
+        this.setToId(toId);
+        this.setInformant(informant);
         this.setReason(reason);
         this.setEvidences(evidences);
     }
@@ -49,11 +54,19 @@ public class Report {
         this.toId = toId;
     }
 
-    public ReportType getType() {
+    public String getInformant() {
+        return informant;
+    }
+
+    public void setInformant(String informant) {
+        this.informant = informant;
+    }
+
+    public String getType() {
         return type;
     }
 
-    public void setType(ReportType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -71,5 +84,13 @@ public class Report {
 
     public void setEvidences(List<String> evidences) {
         this.evidences = evidences;
+    }
+
+    public boolean isHandled() {
+        return handled;
+    }
+
+    public void setHandled(boolean handled) {
+        this.handled = handled;
     }
 }
