@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Controller("FishingController")
 @RequestMapping("/api/{version}/fishing")
-public class FishingController {
+public class FishingController extends BaseController {
 
     @Autowired
     FishingService fishingService;
@@ -34,8 +35,9 @@ public class FishingController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/{id}/report", method = RequestMethod.POST)
-    public Result report(@PathVariable("id") String id, @RequestBody Report report) throws Exception {
+    public Result report(@PathVariable("id") String id, @RequestBody Report report, HttpServletRequest request) throws Exception {
         report.setToId(id);
+        report.setInformant(this.getUserId(request).toString());
         fishingService.report(report);
         return new Result(0, null, true);
     }

@@ -62,8 +62,9 @@ public class UserController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/{id}/report", method = RequestMethod.POST)
-    public Result report(@PathVariable("id") String id, @RequestBody Report report) throws Exception {
+    public Result report(@PathVariable("id") String id, @RequestBody Report report, HttpServletRequest request) throws Exception {
         report.setToId(id);
+        report.setInformant(this.getUserId(request).toString());
         userService.report(report);
         return new Result(0, null, true);
     }
