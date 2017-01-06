@@ -18,7 +18,7 @@ public class BaseController {
     protected UserService userService;
 
     @Autowired
-    AuthenticationServiceImpl authenticationService;
+    protected AuthenticationServiceImpl authenticationService;
 
     protected Integer getUserId(HttpServletRequest request) {
         Sign sign = (Sign) request.getAttribute(REQUEST_ATTRIBUTE_SIGN);
