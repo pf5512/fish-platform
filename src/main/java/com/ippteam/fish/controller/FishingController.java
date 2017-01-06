@@ -1,6 +1,7 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.nosql.mongodb.Fishing;
+import com.ippteam.fish.entity.nosql.mongodb.Report;
 import com.ippteam.fish.service.FishingService;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.version.ApiVersion;
@@ -21,6 +22,23 @@ public class FishingController {
 
     @Autowired
     FishingService fishingService;
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Result fishing(@PathVariable("id") String id) throws Exception {
+        Fishing fishing = fishingService.fishingById(id);
+        return new Result(0, null, fishing);
+    }
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/{id}/report", method = RequestMethod.POST)
+    public Result report(@PathVariable("id") String id, @RequestBody Report report) throws Exception {
+        report.setToId(id);
+        fishingService.report(report);
+        return new Result(0, null, true);
+    }
 
     @ApiVersion(1)
     @ResponseBody

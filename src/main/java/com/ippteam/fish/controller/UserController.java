@@ -1,6 +1,7 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
+import com.ippteam.fish.entity.nosql.mongodb.Report;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.pojo.UserUpdate;
@@ -56,6 +57,15 @@ public class UserController extends BaseController {
         UserUpdate userUpdate = new UserUpdate();
         Reflection.objectValueTransfer(userUpdate, user, true);
         return new Result(0, null, userUpdate);
+    }
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/{id}/report", method = RequestMethod.POST)
+    public Result report(@PathVariable("id") String id, @RequestBody Report report) throws Exception {
+        report.setToId(id);
+        userService.report(report);
+        return new Result(0, null, true);
     }
 
     @ApiVersion(1)

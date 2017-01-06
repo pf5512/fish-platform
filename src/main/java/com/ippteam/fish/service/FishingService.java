@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface FishingService extends ReportService {
 
+    Fishing fishingById(String id);
+
     void add(Fishing fishing);
 
     List<Fishing> near(final double longitude, final double latitude, double maxDistance) throws Exception;

@@ -19,6 +19,10 @@ public class FishingServiceImpl extends ReportServiceImpl implements FishingServ
     @Autowired
     FishingDao fishingDao;
 
+    public Fishing fishingById(String id) {
+        return fishingDao.findById(id);
+    }
+
     public void add(Fishing fishing) {
         fishingDao.insert(fishing);
     }

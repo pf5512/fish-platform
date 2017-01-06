@@ -2,6 +2,7 @@ package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.nosql.mongodb.Comment;
 import com.ippteam.fish.entity.nosql.mongodb.Moment;
+import com.ippteam.fish.entity.nosql.mongodb.Report;
 import com.ippteam.fish.service.MomentServiceImpl;
 import com.ippteam.fish.util.api.exception.ParameterException;
 import com.ippteam.fish.util.api.pojo.Result;
@@ -39,6 +40,15 @@ public class MomentController extends BaseController {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/{id}/report", method = RequestMethod.POST)
+    public Result report(@PathVariable("id") String id, @RequestBody Report report) throws Exception {
+        report.setToId(id);
+        momentService.report(report);
+        return new Result(0, null, true);
     }
 
     @ApiVersion(1)
