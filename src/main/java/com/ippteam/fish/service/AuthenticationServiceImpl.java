@@ -36,12 +36,17 @@ public class AuthenticationServiceImpl {
      * @return token
      */
     public String certificate(String identify) {
+        return certificate(identify, false);
+    }
+
+    public String certificate(String identify, boolean isManager) {
         String token;
         String key;
         int count = 0;
         do {
             token = newToken();
             key = redisKey(token);
+            if (isManager) identify += ":manager";
             if (!redisDao.exists(key)) {
                 if (redisDao.set(key, identify, validity)) {
                     return token;
@@ -73,6 +78,13 @@ public class AuthenticationServiceImpl {
         String key = redisKey(token);
         String identify = redisDao.get(key);
         return identify != null && identify.length() > 0;
+    }
+
+    public boolean isManager(String token) {
+        String key = redisKey(token);
+        String identify = redisDao.get(key);
+        String[] subs = identify.split(":");
+        return subs.length == 2 && subs[1].equals("manager");
     }
 
     /**
