@@ -52,10 +52,11 @@ public class ManagerController extends BaseController {
         }
 
         // 检查是否是管理员
-//        if (user.isman)
-//        throw new Exception();
+        if (!user.getManager()) {
+            throw new BusinessException(BusinessStatus.NOT_ADMINISTRATOR);
+        }
 
-        String token = authenticationService.certificate(user.getId().toString());
+        String token = authenticationService.certificate(user.getId().toString(), true);
         if (!Verify.string(token)) {
             throw new BusinessException(BusinessStatus.UNKNOWN_ERROR);
         }
