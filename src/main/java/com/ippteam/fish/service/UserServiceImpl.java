@@ -96,6 +96,8 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
             return null;
         }
 
+        user.setManager(false);
+        user.setBanned(false);
         int row = userDao.insert(user);
         if (row <= 0) {
             return null;
@@ -110,6 +112,8 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
     }
 
     public void banned(String id) {
-
+        User user = this.getUserById(Integer.parseInt(id));
+        user.setBanned(true);
+        userDao.updateByPrimaryKey(user);
     }
 }
