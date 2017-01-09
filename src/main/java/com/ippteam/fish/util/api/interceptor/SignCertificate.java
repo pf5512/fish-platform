@@ -46,11 +46,14 @@ public class SignCertificate extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String ip = getIpAddr(request);
         String uri = request.getRequestURI();
-        String logBase = String.format("[%s  %s] ", ip, uri);
-        String appkey = request.getParameter("appkey");
-        String signEncrypt = request.getParameter("sign");
 
-        if (!Verify.string(appkey) || !Verify.string(signEncrypt)) {
+        String logBase = String.format("[%s  %s] ", ip, uri);
+        String appkey = request.getHeader("Appkey");
+        appkey = appkey == null || appkey.length() == 0 ? appkey : request.getParameter("appkey");
+        String sign = request.getHeader("Sign");
+        sign = sign == null || sign.length() == 0 ? sign : request.getParameter("sign");
+
+        if (!Verify.string(appkey) || !Verify.string(sign)) {
             logger.info(logBase + SIGN_FAIL_APPKEY_OR_SIGN_NULL);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
@@ -63,7 +66,7 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         // 将sign字符串转换为bytes
         byte[] encryptedBuff;
         try {
-            encryptedBuff = Convert.parseHexStr2Byte(signEncrypt);
+            encryptedBuff = Convert.parseHexStr2Byte(sign);
             if (!Verify.buffer(encryptedBuff)) {
                 logger.info(logBase + SIGN_FAIL_SIGN_CONVERT_BUFFER_FAIL);
                 throw new CertificationException(EXCEPTION_SIGN_FAIL);
@@ -80,35 +83,35 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         }
         // 实例化Sign对象
         String signDecrypt = new String(decryptedBuff);
-        Sign sign = JSON.parse(signDecrypt, Sign.class);
+        Sign signObj = JSON.parse(signDecrypt, Sign.class);
 
-        request.setAttribute("sign", sign);
+        request.setAttribute("sign", signObj);
 
-        if (!verifyExpiredTime(sign.getExpiredTime())) {
+        if (!verifyExpiredTime(signObj.getExpiredTime())) {
             logger.info(logBase + signDecrypt);
             logger.info(logBase + SIGN_FAIL_TIMEOUT);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
-        if (!verifyApi(request, sign.getApi())) {
+        if (!verifyApi(request, signObj.getApi())) {
             logger.info(logBase + signDecrypt);
             logger.info(logBase + SIGN_FAIL_API_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
-        if (!verifyBody(request, sign.getBody())) {
+        if (!verifyBody(request, signObj.getBody())) {
             logger.info(logBase + signDecrypt);
             logger.info(logBase + SIGN_FAIL_BODY_ERROR);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
-        if (!verifyToken(request, sign.getToken())) {
+        if (!verifyToken(request, signObj.getToken())) {
             logger.info(logBase + signDecrypt);
             logger.info(logBase + SIGN_FAIL_TOKEN_INVALID);
             throw new BusinessException(TOKEN_INVALID);
         }
 
-        authenticationService.flushValidity(sign.getToken());
+        authenticationService.flushValidity(signObj.getToken());
         return true;
     }
 
