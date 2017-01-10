@@ -1,4 +1,4 @@
-package com.ippteam.fish.util;
+package com.ippteam.fish.util.aes;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -15,27 +15,20 @@ public class AES {
 
     private static final String IV_STRING = "0102030405060708";
 
-    public static String newSecretKey() {
-        return com.ippteam.fish.util.Random._32String();
-    }
-
     /**
      * 加密
      *
-     * @param content     需要加密的内容
-     * @param securityKey 加密密码
+     * @param content   需要加密的内容(原文)
+     * @param secretKey 加密密码
      * @return
      */
-    public static byte[] encrypt(String content, String securityKey) throws Exception {
-        if (null == securityKey || securityKey.length() != 16) {
-            throw new NullPointerException("security key is invalid.");
-        }
-
-        byte[] byteContent = content.getBytes("UTF-8");
+    public static byte[] encrypt(byte[] content, String secretKey) throws IllegalBlockSizeException,
+            BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException,
+            InvalidKeyException, InvalidAlgorithmParameterException {
 
         // 注意，为了能与 iOS 统一
         // 这里的 key 不可以使用 KeyGenerator、SecureRandom、SecretKey 生成
-        byte[] enCodeFormat = securityKey.getBytes();
+        byte[] enCodeFormat = secretKey.getBytes();
         SecretKeySpec secretKeySpec = new SecretKeySpec(enCodeFormat, "AES");
 
         byte[] initParam = IV_STRING.getBytes();
@@ -45,34 +38,29 @@ public class AES {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-        byte[] encryptedBytes = cipher.doFinal(byteContent);
-        return encryptedBytes;
+        return cipher.doFinal(content);
     }
 
     /**
      * 解密
      *
-     * @param content     待解密内容
-     * @param securityKey 解密密钥
+     * @param cipher    待解密内容(密文)
+     * @param secretKey 解密密钥
      * @return
      */
-    public static byte[] decrypt(byte[] content, String securityKey) throws InvalidKeyException,
+    public static byte[] decrypt(byte[] cipher, String secretKey) throws InvalidKeyException,
             NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException,
             IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
-        if (null == securityKey || securityKey.length() != 16) {
-            throw new NullPointerException("security key is invalid.");
-        }
 
-        byte[] enCodeFormat = securityKey.getBytes();
-        SecretKeySpec secretKey = new SecretKeySpec(enCodeFormat, "AES");
+        byte[] enCodeFormat = secretKey.getBytes();
+        SecretKeySpec secretKeySpec = new SecretKeySpec(enCodeFormat, "AES");
 
         byte[] initParam = IV_STRING.getBytes();
         IvParameterSpec ivParameterSpec = new IvParameterSpec(initParam);
 
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+        Cipher _cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        _cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-        byte[] result = cipher.doFinal(content);
-        return result;
+        return _cipher.doFinal(cipher);
     }
 }

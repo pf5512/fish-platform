@@ -68,7 +68,7 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         // 将sign字符串转换为bytes
         byte[] encryptedBuff;
         try {
-            encryptedBuff = Convert.parseHexStr2Byte(sign);
+            encryptedBuff = Convert.hexStrToBuff(sign);
             if (!Verify.buffer(encryptedBuff)) {
                 logger.info(logBase + SIGN_FAIL_SIGN_CONVERT_BUFFER_FAIL);
                 throw new CertificationException(EXCEPTION_SIGN_FAIL);

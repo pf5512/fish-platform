@@ -5,15 +5,15 @@ package com.ippteam.fish.util;
  */
 public class Convert {
     /**
-     * 将二进制转换成16进制
+     * 将二进制buff转换成16进制字符串
      *
-     * @param buf
+     * @param buff
      * @return
      */
-    public static String parseByte2HexStr(byte buf[]) {
+    public static String buffToHexStr(byte buff[]) {
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < buf.length; i++) {
-            String hex = Integer.toHexString(buf[i] & 0xFF);
+        for (int i = 0; i < buff.length; i++) {
+            String hex = Integer.toHexString(buff[i] & 0xFF);
             if (hex.length() == 1) {
                 hex = '0' + hex;
             }
@@ -23,14 +23,15 @@ public class Convert {
     }
 
     /**
-     * 将16进制转换为二进制
+     * 将16进制字符串转换为二进制buff
      *
      * @param hexStr
      * @return
      */
-    public static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1)
+    public static byte[] hexStrToBuff(String hexStr) {
+        if (hexStr.length() < 1) {
             return null;
+        }
         byte[] result = new byte[hexStr.length() / 2];
         for (int i = 0; i < hexStr.length() / 2; i++) {
             int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);

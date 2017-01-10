@@ -1,6 +1,6 @@
 package com.ippteam.fish.pojo;
 
-import com.ippteam.fish.util.AES;
+import com.ippteam.fish.util.aes.AES;
 import com.ippteam.fish.util.Convert;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.exception.BusinessException;
@@ -47,7 +47,7 @@ public class Login {
 
         byte[] encryptedBuff;
         try {
-            encryptedBuff = Convert.parseHexStr2Byte(password);
+            encryptedBuff = Convert.hexStrToBuff(password);
             if (!Verify.buffer(encryptedBuff)) {
                 throw new BusinessException(AES_DECRYPT_FAIL);
             }
