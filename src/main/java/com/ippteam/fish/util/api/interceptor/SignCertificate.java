@@ -63,6 +63,7 @@ public class SignCertificate extends HandlerInterceptorAdapter {
             logger.info(logBase + SIGN_FAIL_APPKEY_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
+        request.setAttribute("securityKey", securityKey);
         // 将sign字符串转换为bytes
         byte[] encryptedBuff;
         try {

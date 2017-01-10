@@ -6,6 +6,7 @@ import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.exception.*;
+import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.api.version.ApiVersion;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,13 +28,14 @@ public class SessionController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(@RequestBody Login login, HttpServletRequest request) {
+    public Result login(@RequestBody Login login, HttpServletRequest request) throws Exception {
+        String securityKey = (String) request.getAttribute("securityKey");
         if (!Verify.string(login.getAccount()) ||
-                !Verify.string(login.getPassword())) {
+                !Verify.string(login.getPasswordPlain(securityKey))) {
             throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
 
-        User user = userService.login(login.getAccount(), login.getPassword());
+        User user = userService.login(login.getAccount(), login.getPasswordPlain(securityKey));
         if (user == null) {
             throw new BusinessException(BusinessStatus.USERNAME_OR_PASSWORD_INVALID);
         }

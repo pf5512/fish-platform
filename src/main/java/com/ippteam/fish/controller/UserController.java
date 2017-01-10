@@ -72,10 +72,11 @@ public class UserController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/regnew", method = RequestMethod.POST)
-    public Result regNew(@RequestBody RegNew regNew, HttpServletRequest request) {
+    public Result regNew(@RequestBody RegNew regNew, HttpServletRequest request) throws Exception {
+        String securityKey = (String) request.getAttribute("securityKey");
         String authCode = regNew.getAuthCode();
         String account = regNew.getAccount();
-        String pwd = regNew.getPassword();
+        String pwd = regNew.getPasswordPlain(securityKey);
         if (!Verify.string(pwd)) {
             throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
@@ -155,10 +156,11 @@ public class UserController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/resetpwd", method = RequestMethod.POST)
-    public Result resetpwd(@RequestBody RegNew regNew) {
+    public Result resetpwd(@RequestBody RegNew regNew, HttpServletRequest request) throws Exception {
+        String securityKey = (String) request.getAttribute("securityKey");
         String authCode = regNew.getAuthCode();
         String account = regNew.getAccount();
-        String pwd = regNew.getPassword();
+        String pwd = regNew.getPasswordPlain(securityKey);
         if (!Verify.string(pwd)) {
             throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }

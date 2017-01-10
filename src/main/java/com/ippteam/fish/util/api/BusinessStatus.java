@@ -25,7 +25,8 @@ public enum BusinessStatus {
 
     TOKEN_INVALID(10040, "token is invalid, please login again"),
     PERMISSION_DENIED(10041, "permission denied"),
-    NOT_ADMINISTRATOR(10042,"not the administrator");
+    NOT_ADMINISTRATOR(10042, "not the administrator"),
+    AES_DECRYPT_FAIL(10043, "aes decrypt fail");
 
     private int code;
     private String des;
