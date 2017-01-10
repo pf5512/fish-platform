@@ -3,6 +3,7 @@ package com.ippteam.fish.util.api.interceptor;
 import com.ippteam.fish.service.AuthenticationServiceImpl;
 import com.ippteam.fish.service.DeveloperService;
 import com.ippteam.fish.util.*;
+import com.ippteam.fish.util.aes.AES;
 import com.ippteam.fish.util.api.exception.BusinessException;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.pojo.Sign;
@@ -49,9 +50,9 @@ public class SignCertificate extends HandlerInterceptorAdapter {
 
         String logBase = String.format("[%s  %s] ", ip, uri);
         String appkey = request.getHeader("Appkey");
-        appkey = appkey == null || appkey.length() == 0 ? appkey : request.getParameter("appkey");
+        appkey = (appkey == null || appkey.length() == 0) ? request.getParameter("appkey") : appkey;
         String sign = request.getHeader("Sign");
-        sign = sign == null || sign.length() == 0 ? sign : request.getParameter("sign");
+        sign = (sign == null || sign.length() == 0) ? request.getParameter("sign") : sign;
 
         if (!Verify.string(appkey) || !Verify.string(sign)) {
             logger.info(logBase + SIGN_FAIL_APPKEY_OR_SIGN_NULL);
