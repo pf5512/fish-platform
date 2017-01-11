@@ -59,12 +59,12 @@ public class SignCertificate extends HandlerInterceptorAdapter {
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
-        String secretKey = developerService.getSecurityKeyByAppkey(appkey);
+        String secretKey = developerService.getSecretKeyByAppkey(appkey);
         if (!Verify.string(secretKey)) {
             logger.info(logBase + SIGN_FAIL_APPKEY_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-        request.setAttribute("securityKey", secretKey);
+        request.setAttribute(REQUEST_ATTRIBUTE_AES_SECRET_KEY, secretKey);
 
 
         String signDecrypt;

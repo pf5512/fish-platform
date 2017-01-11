@@ -5,6 +5,6 @@ package com.ippteam.fish.service;
  */
 public interface DeveloperService {
 
-    String getSecurityKeyByAppkey(String appKey);
+    String getSecretKeyByAppkey(String appKey);
 
 }

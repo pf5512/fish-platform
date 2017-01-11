@@ -19,6 +19,7 @@ public class Final {
 
     // key
     public static final String REQUEST_ATTRIBUTE_SIGN = "sign";
+    public static final String REQUEST_ATTRIBUTE_AES_SECRET_KEY = "secretKey";
 
     // 非业务异常
     public static final String EXCEPTION_REQUEST_URL_PARAMER_ERROE = "required request url paramer is error.";

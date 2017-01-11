@@ -18,12 +18,12 @@ public class DeveloperServiceImpl implements DeveloperService {
     @Autowired
     DeveloperMapper developerDao;
 
-    public String getSecurityKeyByAppkey(String appKey) {
+    public String getSecretKeyByAppkey(String appKey) {
         DeveloperExample developerExample = new DeveloperExample();
         developerExample.or().andAppKeyEqualTo(appKey);
 
         List<Developer> developers = developerDao.selectByExample(developerExample);
-        if (!developers.isEmpty()){
+        if (!developers.isEmpty()) {
             return developers.get(0).getSecurityKey();
         }
         return null;

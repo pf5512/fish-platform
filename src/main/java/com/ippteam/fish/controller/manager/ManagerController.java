@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.ippteam.fish.util.Final.EXCEPTION_REQUEST_PARAMER_INVALID;
+import static com.ippteam.fish.util.Final.REQUEST_ATTRIBUTE_AES_SECRET_KEY;
 import static com.ippteam.fish.util.Final.REQUEST_ATTRIBUTE_SIGN;
 
 /**
@@ -41,13 +42,13 @@ public class ManagerController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody Login login, HttpServletRequest request) throws Exception {
-        String securityKey = (String) request.getAttribute("securityKey");
+        String secretKey = (String) request.getAttribute(REQUEST_ATTRIBUTE_AES_SECRET_KEY);
         if (!Verify.string(login.getAccount()) ||
-                !Verify.string(login.getPasswordPlain(securityKey))) {
+                !Verify.string(login.getPasswordPlain(secretKey))) {
             throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
         }
 
-        User user = userService.login(login.getAccount(), login.getPasswordPlain(securityKey));
+        User user = userService.login(login.getAccount(), login.getPasswordPlain(secretKey));
         if (user == null) {
             throw new BusinessException(BusinessStatus.USERNAME_OR_PASSWORD_INVALID);
         }
