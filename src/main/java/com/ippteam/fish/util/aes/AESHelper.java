@@ -97,7 +97,7 @@ public class AESHelper {
         try {
             buff = Convert.hexStrToBuff(hexStr);
         } catch (NumberFormatException e) {
-            throw new ConvertFailException("hex str is invalid");
+            throw new ConvertFailException("hex str is invalid, cannot be converted to binary buff");
         }
 
         return decryptToStr(buff, secretKey);
@@ -113,7 +113,7 @@ public class AESHelper {
      */
     public static String decryptToStr(byte[] cipher, String secretKey) throws DecryptFailException {
         if (cipher == null || cipher.length == 0) {
-            throw new DecryptFailException("hex str convert buff fail");
+            throw new DecryptFailException("binary buff can't be empty");
         }
         byte[] buff = decryptToBuff(cipher, secretKey);
         return new String(buff);

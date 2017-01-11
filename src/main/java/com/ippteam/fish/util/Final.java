@@ -28,4 +28,5 @@ public class Final {
     public static final String EXCEPTION_REQUEST_METHOD_NOTSUPPORTED = "Request method not supported or Request not found.";
     public static final String EXCEPTION_UNKNOWN_EXCEPTION = "unknown exception.";
     public static final String EXCEPTION_SIGN_FAIL = "sign fail.";
+    public static final String EXCEPTION_AES_DECRYPT_FAIL = "aes decrypt fail.";
 }

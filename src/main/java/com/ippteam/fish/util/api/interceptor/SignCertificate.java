@@ -3,9 +3,10 @@ package com.ippteam.fish.util.api.interceptor;
 import com.ippteam.fish.service.AuthenticationServiceImpl;
 import com.ippteam.fish.service.DeveloperService;
 import com.ippteam.fish.util.*;
-import com.ippteam.fish.util.aes.AES;
+import com.ippteam.fish.util.aes.AESHelper;
+import com.ippteam.fish.util.aes.ConvertFailException;
+import com.ippteam.fish.util.aes.DecryptFailException;
 import com.ippteam.fish.util.api.exception.BusinessException;
-import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.api.exception.CertificationException;
 import org.apache.log4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -47,8 +47,8 @@ public class SignCertificate extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         String ip = getIpAddr(request);
         String uri = request.getRequestURI();
-
         String logBase = String.format("[%s  %s] ", ip, uri);
+
         String appkey = request.getHeader("Appkey");
         appkey = (appkey == null || appkey.length() == 0) ? request.getParameter("appkey") : appkey;
         String sign = request.getHeader("Sign");
@@ -58,71 +58,74 @@ public class SignCertificate extends HandlerInterceptorAdapter {
             logger.info(logBase + SIGN_FAIL_APPKEY_OR_SIGN_NULL);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-        // 获取appkey对应的秘钥
-        String securityKey = developerService.getSecurityKeyByAppkey(appkey);
-        if (!Verify.string(securityKey)) {
+
+        String secretKey = developerService.getSecurityKeyByAppkey(appkey);
+        if (!Verify.string(secretKey)) {
             logger.info(logBase + SIGN_FAIL_APPKEY_INVALID);
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
-        request.setAttribute("securityKey", securityKey);
-        // 将sign字符串转换为bytes
-        byte[] encryptedBuff;
+        request.setAttribute("securityKey", secretKey);
+
+
+        String signDecrypt;
         try {
-            encryptedBuff = Convert.hexStrToBuff(sign);
-            if (!Verify.buffer(encryptedBuff)) {
-                logger.info(logBase + SIGN_FAIL_SIGN_CONVERT_BUFFER_FAIL);
-                throw new CertificationException(EXCEPTION_SIGN_FAIL);
-            }
-        } catch (IllegalArgumentException e) {
-            logger.info(logBase + SIGN_FAIL_SIGN_CONVERT_BUFFER_ERROR);
+            signDecrypt = AESHelper.decryptToStr(sign, secretKey);
+        } catch (ConvertFailException e) {
+            logger.info(logBase + e.getMessage());
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
-        }
-        // 解密
-        byte[] decryptedBuff = AES.decrypt(encryptedBuff, securityKey);
-        if (!Verify.buffer(decryptedBuff)) {
-            logger.info(logBase + SIGN_FAIL_SIGN_BUFFER_DECRYPTED_FAIL);
-            throw new CertificationException(EXCEPTION_SIGN_FAIL);
-        }
-        // 实例化Sign对象
-        String signDecrypt = new String(decryptedBuff);
-        Sign signObj = JSON.parse(signDecrypt, Sign.class);
-
-        request.setAttribute("sign", signObj);
-
-        if (!verifyExpiredTime(signObj.getExpiredTime())) {
-            logger.info(logBase + signDecrypt);
-            logger.info(logBase + SIGN_FAIL_TIMEOUT);
+        } catch (DecryptFailException e) {
+            logger.info(logBase + e.getMessage());
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
-        if (!verifyApi(request, signObj.getApi())) {
-            logger.info(logBase + signDecrypt);
-            logger.info(logBase + SIGN_FAIL_API_ERROR);
+        Sign signObj;
+        try {
+            signObj = JSON.parse(signDecrypt, Sign.class);
+            request.setAttribute("sign", signObj);
+        } catch (Exception e) {
+            logger.info(logBase + e.getMessage());
             throw new CertificationException(EXCEPTION_SIGN_FAIL);
         }
 
-        if (!verifyBody(request, signObj.getBody())) {
-            logger.info(logBase + signDecrypt);
-            logger.info(logBase + SIGN_FAIL_BODY_ERROR);
-            throw new CertificationException(EXCEPTION_SIGN_FAIL);
-        }
-
-        if (!verifyToken(request, signObj.getToken())) {
-            logger.info(logBase + signDecrypt);
-            logger.info(logBase + SIGN_FAIL_TOKEN_INVALID);
-            throw new BusinessException(TOKEN_INVALID);
-        }
+        verifySign(logBase, signDecrypt, signObj, request);
 
         authenticationService.flushValidity(signObj.getToken());
         return true;
     }
 
-    private void writerData(HttpServletResponse response) throws Exception {
-        PrintWriter printWriter = response.getWriter();
-        Result result = new Result(400, "appkey or sign is invalid", null);
-        String resultString = JSON.stringify(result);
-        printWriter.println(resultString);
-        printWriter.close();
+    /**
+     * 验证签名
+     *
+     * @param logBase     记录日志需要
+     * @param signDecrypt 记录日志需要
+     * @param sign        Sign对象
+     * @param request     请求
+     * @throws Exception
+     */
+    private void verifySign(String logBase, String signDecrypt, Sign sign, HttpServletRequest request) throws Exception {
+        if (!verifyExpiredTime(sign.getExpiredTime())) {
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_TIMEOUT);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
+        }
+
+        if (!verifyApi(request, sign.getApi())) {
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_API_ERROR);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
+        }
+
+        if (!verifyBody(request, sign.getBody())) {
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_BODY_ERROR);
+            throw new CertificationException(EXCEPTION_SIGN_FAIL);
+        }
+
+        if (!verifyToken(request, sign.getToken())) {
+            logger.info(logBase + signDecrypt);
+            logger.info(logBase + SIGN_FAIL_TOKEN_INVALID);
+            throw new BusinessException(TOKEN_INVALID);
+        }
     }
 
     /**

@@ -1,13 +1,10 @@
 package com.ippteam.fish.pojo;
 
-import com.ippteam.fish.util.aes.AES;
-import com.ippteam.fish.util.Convert;
-import com.ippteam.fish.util.Verify;
-import com.ippteam.fish.util.api.exception.BusinessException;
-import com.ippteam.fish.util.api.interceptor.SignCertificate;
+import com.ippteam.fish.util.aes.AESHelper;
+import com.ippteam.fish.util.api.exception.CertificationException;
 import org.apache.log4j.Logger;
 
-import static com.ippteam.fish.util.api.BusinessStatus.*;
+import static com.ippteam.fish.util.Final.EXCEPTION_AES_DECRYPT_FAIL;
 
 /**
  * Created by isunimp on 16/11/15.
@@ -17,6 +14,8 @@ public class RegNew {
     String password;
     RegisterWay registerWay;
     String authCode;
+
+    private static Logger logger = Logger.getLogger(Login.class);
 
     public String getAccount() {
         return account;
@@ -50,25 +49,12 @@ public class RegNew {
         this.authCode = authCode;
     }
 
-    public String getPasswordPlain(String securityKey) throws Exception {
-        // 将16进制字符串转换为buffer
-        Logger logger = Logger.getLogger(SignCertificate.class);
-
-        byte[] encryptedBuff;
+    public String getPasswordPlain(String secretKey) {
         try {
-            encryptedBuff = Convert.hexStrToBuff(password);
-            if (!Verify.buffer(encryptedBuff)) {
-                throw new BusinessException(AES_DECRYPT_FAIL);
-            }
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(AES_DECRYPT_FAIL);
+            return AESHelper.decryptToStr(this.getPassword(), secretKey);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            throw new CertificationException(EXCEPTION_AES_DECRYPT_FAIL);
         }
-        // 解密
-        byte[] decryptedBuff = AES.decrypt(encryptedBuff, securityKey);
-        if (!Verify.buffer(decryptedBuff)) {
-            throw new BusinessException(AES_DECRYPT_FAIL);
-        }
-
-        return new String(decryptedBuff);
     }
 }
