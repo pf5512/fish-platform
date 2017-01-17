@@ -73,7 +73,6 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         }
         request.setAttribute(REQUEST_ATTRIBUTE_AES_SECRET_KEY, secretKey);
 
-
         String signDecrypt;
         try {
             signDecrypt = AESHelper.decryptToStr(sign, secretKey);

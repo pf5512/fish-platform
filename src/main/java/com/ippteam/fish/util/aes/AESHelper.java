@@ -92,7 +92,7 @@ public class AESHelper {
      * @return 原文字符串
      * @throws DecryptFailException
      */
-    public static String decryptToStr(String hexStr, String secretKey) throws DecryptFailException, ConvertFailException {
+    public static String decryptToStr(String hexStr, String secretKey) throws DecryptFailException, ConvertFailException, UnsupportedEncodingException {
         byte[] buff;
         try {
             buff = Convert.hexStrToBuff(hexStr);
@@ -111,12 +111,12 @@ public class AESHelper {
      * @return 原文字符串
      * @throws DecryptFailException
      */
-    public static String decryptToStr(byte[] cipher, String secretKey) throws DecryptFailException {
+    public static String decryptToStr(byte[] cipher, String secretKey) throws DecryptFailException, UnsupportedEncodingException {
         if (cipher == null || cipher.length == 0) {
             throw new DecryptFailException("binary buff can't be empty");
         }
         byte[] buff = decryptToBuff(cipher, secretKey);
-        return new String(buff);
+        return new String(buff, "utf-8");
     }
 
     /**
