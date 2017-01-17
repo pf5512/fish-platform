@@ -12,7 +12,7 @@ public class JSON {
     static public ObjectMapper mapper = new ObjectMapper();
 
     public static <T> T parse(String JSONString, Class<T> clazz) throws Exception {
-        return JSON.mapper.readValue(JSONString.getBytes(), clazz);
+        return JSON.mapper.readValue(JSONString.getBytes("utf-8"), clazz);
     }
 
     public static <T> T parse(Object object, Class<T> clazz) throws Exception {
