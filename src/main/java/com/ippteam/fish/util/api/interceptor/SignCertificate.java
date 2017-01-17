@@ -49,6 +49,13 @@ public class SignCertificate extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         String logBase = String.format("[%s  %s] ", ip, uri);
 
+        // 文件下载忽略验证
+        if (uri.contains("/api/v1/file/")) {
+            if (!uri.contains("/api/v1/file/upload")) {
+                return true;
+            }
+        }
+
         String appkey = request.getHeader("Appkey");
         appkey = (appkey == null || appkey.length() == 0) ? request.getParameter("appkey") : appkey;
         String sign = request.getHeader("Sign");
