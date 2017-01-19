@@ -1,5 +1,3 @@
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.Login;
 import com.ippteam.fish.pojo.RegNew;
@@ -7,6 +5,8 @@ import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.pojo.UserUpdate;
 import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.Random;
+import com.ippteam.fish.util.aes.AES;
+import com.ippteam.fish.util.aes.AESHelper;
 import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.email.*;
 import com.mongodb.*;
@@ -21,28 +21,19 @@ import redis.clients.jedis.Jedis;
 import java.util.*;
 
 public class Util {
-    @Test
-    public void newSecretKey() {
-        System.out.println(AES.newSecretKey());
-    }
 
     @Test
-    public void AES() throws Exception {
-        String content = "test";
-        String password = "0e5b78c1ff6f4ed4";
-        System.out.println("加密前：" + content);
-        byte[] encryptResult = AES.encrypt(content, password);
-        System.out.println(Convert.parseByte2HexStr(encryptResult));
-        byte[] decryptResult = AES.decrypt(encryptResult, password);
-        System.out.println("解密后：" + new String(decryptResult));
-
-
-        String s = "2525b1d6c02f870372b8aea4513e4d5e7913a7bc4978e3d2da7ad984b538e19c91e5f8ca435587a78bfb46086c035b9a915b85d209a125f24e90bbcf80ac812416b82184f15f102710ab9912dd2e62a6e0f22ae36ba5fa091cf53acdd205f8e580f3228768c259ae64367e9c9a411bac";
-        byte[] bytes = Convert.parseHexStr2Byte(s);
-        byte[] bytes1 = AES.decrypt(bytes, password);
-        System.out.println(new String(bytes1));
-
-
+    public void AES() {
+        try {
+            String secretKey = "qwertyuiopasdfgh";
+            String str1 = "";
+            String hex = AESHelper.encryptToHex(str1, "sa");
+            System.out.println(hex);
+            String original = AESHelper.decryptToStr("11111", "sasa");
+            System.out.println(original);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -220,13 +211,12 @@ public class Util {
         }
     }
 
+    static String securityKey = "0e5b78c1ff6f4ed4";
+
     public void sign(Sign sign) {
-        String securityKey = "0e5b78c1ff6f4ed4";
         try {
             String signString = JSON.stringify(sign);
-            byte[] buff = AES.encrypt(signString, securityKey);
-            // 转换成hex字符串
-            String hexString = Convert.parseByte2HexStr(buff);
+            String hexString = AESHelper.encryptToHex(signString, securityKey);
             System.out.println(signString);
             System.out.println(hexString);
         } catch (Exception e) {
@@ -251,15 +241,24 @@ public class Util {
     }
 
     @Test
-    public void loginSign() {
+    public void loginSign() throws Exception {
         Login login = new Login();
-        login.setAccount("ansheck@163.com");
-        login.setPassword("123456");
+        login.setAccount("lbj1234");
+        login.setPassword(AESHelper.encryptToHex("123456",securityKey));
 
         Sign sign = new Sign();
         sign.setExpiredTime(System.currentTimeMillis());
         sign.setApi("/v1/session/login");
         sign.setBody(login);
+        sign(sign);
+    }
+
+    @Test
+    public void user(){
+        Sign sign = new Sign();
+        sign.setExpiredTime(System.currentTimeMillis());
+        sign.setApi("/v1/user/");
+        sign.setToken("c91dbb8bc2474d1b9cabb13fbae0442c");
         sign(sign);
     }
 

@@ -1,7 +1,4 @@
-import com.ippteam.fish.dao.nosql.mongodb.FileDao;
-import com.ippteam.fish.dao.nosql.mongodb.FishingDao;
-import com.ippteam.fish.dao.nosql.mongodb.MomentDao;
-import com.ippteam.fish.dao.nosql.mongodb.WeatherDao;
+import com.ippteam.fish.dao.nosql.mongodb.*;
 import com.ippteam.fish.dao.nosql.mongodb.util.MongoBaseDao;
 import com.ippteam.fish.entity.nosql.mongodb.*;
 import com.mongodb.BasicDBList;
@@ -28,6 +25,7 @@ public class Dao {
     public void fishingDao() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         FishingDao fishingDao = (FishingDao) context.getBean("FishingDao");
+//        fishingDao.near(1, 1, 1);
         List<Fishing> fishings = fishingDao.findAll();
         Fishing fishing = fishings.get(1);
         fishing.setSummary("测试更新22222222222");
@@ -54,11 +52,20 @@ public class Dao {
     }
 
     @Test
+    public void report() throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
+        ReportDao reportDao = (ReportDao) context.getBean("ReportDao");
+
+        List list = reportDao.findAll();
+        System.out.println();
+    }
+
+    @Test
     public void weather() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         WeatherDao weatherDao = (WeatherDao) context.getBean("WeatherDao");
 
-        Weather weathers1 = weatherDao.last();
+        Weather weathers1 = weatherDao.last("绵阳");
         System.out.println();
     }
 

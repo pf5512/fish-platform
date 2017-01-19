@@ -17,7 +17,7 @@ public class Controller {
     }
 
     @Test
-    public void user() {
+    public void user() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("Fish-servlet.xml");
         UserController userController = (UserController) context.getBean("UserController");
         RegNew regNew = new RegNew();
