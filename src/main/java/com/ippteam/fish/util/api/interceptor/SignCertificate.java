@@ -221,7 +221,8 @@ public class SignCertificate extends HandlerInterceptorAdapter {
                 NO_NEED_AUTH_URI_REGNEW,
                 NO_NEED_AUTH_URI_RESETPWD,
                 NO_NEED_AUTH_URI_WEATHER,
-                NO_NEED_AUTH_URI_AUTHCODE_EMAIL
+                NO_NEED_AUTH_URI_AUTHCODE_EMAIL,
+                NO_NEED_AUTH_URI_MOMENT_MOMENTS
         };
         for (String iten : filterURIs) {
             if (uri.lastIndexOf(iten) == uri.length() - iten.length()) {
