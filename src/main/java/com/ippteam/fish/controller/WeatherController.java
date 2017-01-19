@@ -1,7 +1,6 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.service.WeatherServiceImpl;
-import com.ippteam.fish.util.JSON;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.version.ApiVersion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +28,7 @@ public class WeatherController extends BaseController {
     @ApiVersion(1)
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Result weather(@RequestParam String city) throws Exception {
-        String string = weatherService.weather(city, new Date());
-        byte[] bytes = string.getBytes("utf-8");
-        Map map = JSON.mapper.readValue(bytes, Map.class);
+        Map map = weatherService.weather(city, new Date());
         return new Result(0, null, map);
     }
 }

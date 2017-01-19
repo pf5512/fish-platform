@@ -17,7 +17,7 @@ public class Weather {
 
     Date date;
 
-    String data;
+    Object data;
 
     public String get_id() {
         return _id;
@@ -35,11 +35,11 @@ public class Weather {
         this.date = date;
     }
 
-    public String getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }
