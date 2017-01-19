@@ -170,24 +170,9 @@ public class UserController extends BaseController {
         }
         authCodeService.delete(authCode);
 
-        User user;
-        switch (regNew.getRegisterWay()) {
-            case EMAIL: {
-                if (!Verify.email(account)) {
-                    throw new BusinessException(BusinessStatus.EMAIL_INVALID);
-                }
-                if (userService.getUserByEmail(account) != null) {
-                    throw new BusinessException(BusinessStatus.EMAIL_EXISTING);
-                }
-                user = userService.getUserByEmail(account);
-                break;
-            }
-            case PHONE: {
-                throw new BusinessException(BusinessStatus.UNDER_CONSTRUCTING_REGNEW_PHONE);
-            }
-            default: {
-                throw new ParameterException(EXCEPTION_REQUEST_PARAMER_INVALID);
-            }
+        User user = userService.getUserByEmail(account);
+        if (user == null) {
+            throw new BusinessException(BusinessStatus.ACCOUNT_NOT_EXIST);
         }
 
         user.setPassword(pwd);
