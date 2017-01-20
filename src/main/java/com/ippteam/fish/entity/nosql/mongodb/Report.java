@@ -31,6 +31,10 @@ public class Report {
 
     boolean handled = false;
 
+    public Report(){
+
+    }
+
     public Report(String toId, String informant, String reason, List<String> evidences) {
         this.setToId(toId);
         this.setInformant(informant);

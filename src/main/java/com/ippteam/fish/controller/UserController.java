@@ -1,10 +1,10 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.User;
-import com.ippteam.fish.entity.nosql.mongodb.Report;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
 import com.ippteam.fish.pojo.UserUpdate;
+import com.ippteam.fish.pojo.Report;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Convert;
 import com.ippteam.fish.util.Reflection;
@@ -62,7 +62,9 @@ public class UserController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/{id}/report", method = RequestMethod.POST)
-    public Result report(@PathVariable("id") String id, @RequestBody Report report, HttpServletRequest request) throws Exception {
+    public Result report(@PathVariable("id") String id, @RequestBody Report r, HttpServletRequest request) throws Exception {
+        com.ippteam.fish.entity.nosql.mongodb.Report report = new com.ippteam.fish.entity.nosql.mongodb.Report();
+        Reflection.objectValueTransfer(report, r, true);
         report.setToId(id);
         report.setInformant(this.getUserId(request).toString());
         userService.report(report);
