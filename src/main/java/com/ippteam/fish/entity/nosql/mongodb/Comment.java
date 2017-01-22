@@ -1,5 +1,7 @@
 package com.ippteam.fish.entity.nosql.mongodb;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -17,6 +19,7 @@ public class Comment {
     String to;
 
     // 评论时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     Date date;
 
     boolean display = true;

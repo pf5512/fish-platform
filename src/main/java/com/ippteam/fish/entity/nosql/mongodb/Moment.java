@@ -1,6 +1,8 @@
 package com.ippteam.fish.entity.nosql.mongodb;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 /**
  * Created by isunimp on 16/12/5.
  */
+@Document(collection = "moment")
 public class Moment {
     @Id
     String _id;
@@ -27,10 +30,14 @@ public class Moment {
     // 视频地址
     String video;
 
+    // 兴趣点
+    String POIName;
+
     // 位置
     Location location;
 
     // 发布时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     Date date;
 
     // 点赞数量
@@ -138,5 +145,13 @@ public class Moment {
 
     public void setDisplay(boolean display) {
         this.display = display;
+    }
+
+    public String getPOIName() {
+        return POIName;
+    }
+
+    public void setPOIName(String POIName) {
+        this.POIName = POIName;
     }
 }
