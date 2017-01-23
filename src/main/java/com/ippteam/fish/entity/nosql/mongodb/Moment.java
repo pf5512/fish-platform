@@ -31,7 +31,7 @@ public class Moment {
     String video;
 
     // 兴趣点
-    String POIName;
+    String poiname;
 
     // 位置
     Location location;
@@ -147,11 +147,11 @@ public class Moment {
         this.display = display;
     }
 
-    public String getPOIName() {
-        return POIName;
+    public String getPoiname() {
+        return poiname;
     }
 
-    public void setPOIName(String POIName) {
-        this.POIName = POIName;
+    public void setPoiname(String poiname) {
+        this.poiname = poiname;
     }
 }
