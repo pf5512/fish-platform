@@ -1,6 +1,7 @@
 package com.ippteam.fish.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -16,7 +17,8 @@ public class Reflection {
      * @param valueObject 值对象
      * @param ignoreNull  是否忽略null值
      */
-    public static void objectValueTransfer(Object toObject, Object valueObject, boolean ignoreNull) throws Exception {
+    public static void objectValueTransfer(Object toObject, Object valueObject, boolean ignoreNull) throws NoSuchMethodException,
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class toClazz = toObject.getClass();
         Class fromClazz = valueObject.getClass();
         Field[] toFields = toObject.getClass().getDeclaredFields();
@@ -34,7 +36,7 @@ public class Reflection {
                     Method getMethod = fromClazz.getMethod(getMethodName);
                     Object value = getMethod.invoke(valueObject);
 
-                    if (value == null && ignoreNull == true) break;
+                    if (value == null && ignoreNull) break;
 
                     // set值
                     Method setMethod = toClazz.getMethod(setMethodName, field.getType());

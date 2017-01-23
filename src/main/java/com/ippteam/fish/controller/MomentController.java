@@ -1,9 +1,11 @@
 package com.ippteam.fish.controller;
 
 import com.ippteam.fish.entity.nosql.mongodb.Comment;
-import com.ippteam.fish.entity.nosql.mongodb.Moment;
 import com.ippteam.fish.entity.nosql.mongodb.Report;
+import com.ippteam.fish.pojo.Moment;
+import com.ippteam.fish.pojo.User;
 import com.ippteam.fish.service.MomentServiceImpl;
+import com.ippteam.fish.util.Reflection;
 import com.ippteam.fish.util.api.exception.ParameterException;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.pojo.Sign;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +37,14 @@ public class MomentController extends BaseController {
     @RequestMapping("/{id}")
     public Result moment(@PathVariable(value = "id") String id) throws Exception {
         try {
-            return new Result(0, null, momentService.getMoment(id));
+            com.ippteam.fish.entity.nosql.mongodb.Moment m = momentService.getMoment(id);
+            com.ippteam.fish.entity.User u = userService.getUserById(new Integer(m.getPublisher()));
+            Moment moment = new Moment();
+            Reflection.objectValueTransfer(moment, m, true);
+            User user = new User();
+            Reflection.objectValueTransfer(user, u, true);
+            moment.setUser(user);
+            return new Result(0, null, moment);
         } catch (IllegalArgumentException e) {
             throw new ParameterException(EXCEPTION_REQUEST_ID_INVALID);
         } catch (Exception e) {
@@ -56,17 +66,32 @@ public class MomentController extends BaseController {
     @ResponseBody
     @RequestMapping("/moments")
     public Result moments(@RequestParam double longitude, @RequestParam double latitude) throws Exception {
-        return new Result(0, null, momentService.getMoments(longitude, latitude));
+        List<com.ippteam.fish.entity.nosql.mongodb.Moment> moments = momentService.getMoments(longitude, latitude);
+        List<Moment> momentPjs = new ArrayList<Moment>();
+        for (com.ippteam.fish.entity.nosql.mongodb.Moment moment : moments) {
+            Moment momentPj = new Moment();
+            Reflection.objectValueTransfer(momentPj, moment, true);
+
+            User userPj = new User();
+            com.ippteam.fish.entity.User user = userService.getUserById(new Integer(moment.getPublisher()));
+            Reflection.objectValueTransfer(userPj, user, true);
+
+            momentPj.setUser(userPj);
+            momentPjs.add(momentPj);
+        }
+        return new Result(0, null, momentPjs);
     }
 
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Result add(@RequestBody Moment moment, HttpServletRequest request) {
+    public Result add(@RequestBody Moment moment, HttpServletRequest request) throws Exception {
         Sign sign = (Sign) request.getAttribute(REQUEST_ATTRIBUTE_SIGN);
         moment.setPublisher(authenticationService.getIdentify(sign.getToken()));
         moment.setDate(new Date());
-        momentService.addMoment(moment);
+        com.ippteam.fish.entity.nosql.mongodb.Moment m = new com.ippteam.fish.entity.nosql.mongodb.Moment();
+        Reflection.objectValueTransfer(m, moment, true);
+        momentService.addMoment(m);
         return new Result(0, null, true);
     }
 

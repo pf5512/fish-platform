@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by isunimp on 16/12/22.
  */
-public class UserUpdate {
+public class User {
 
     private Integer id;
 

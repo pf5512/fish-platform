@@ -1,9 +1,8 @@
 package com.ippteam.fish.controller;
 
-import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
-import com.ippteam.fish.pojo.UserUpdate;
+import com.ippteam.fish.pojo.User;
 import com.ippteam.fish.pojo.Report;
 import com.ippteam.fish.service.AuthCodeService;
 import com.ippteam.fish.util.Convert;
@@ -43,20 +42,20 @@ public class UserController extends BaseController {
         Sign sign = (Sign) request.getAttribute(REQUEST_ATTRIBUTE_SIGN);
         String token = sign.getToken();
         String id = authenticationService.getIdentify(token);
-        User user = userService.getUserById(Integer.parseInt(id));
-        UserUpdate userUpdate = new UserUpdate();
-        Reflection.objectValueTransfer(userUpdate, user, true);
-        return new Result(0, null, userUpdate);
+        com.ippteam.fish.entity.User user = userService.getUserById(Integer.parseInt(id));
+        User userPj = new User();
+        Reflection.objectValueTransfer(userPj, user, true);
+        return new Result(0, null, userPj);
     }
 
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Result user(@PathVariable(value = "id") Integer id) throws Exception {
-        User user = userService.getUserById(id);
-        UserUpdate userUpdate = new UserUpdate();
-        Reflection.objectValueTransfer(userUpdate, user, true);
-        return new Result(0, null, userUpdate);
+        com.ippteam.fish.entity.User user = userService.getUserById(id);
+        User userPj = new User();
+        Reflection.objectValueTransfer(userPj, user, true);
+        return new Result(0, null, userPj);
     }
 
     @ApiVersion(1)
@@ -93,7 +92,7 @@ public class UserController extends BaseController {
         String IPString = this.getIpAddr(request);
         Integer ipInt = (int) Convert.ipToLong(IPString);
         Date now = new Date();
-        User u = new User();
+        com.ippteam.fish.entity.User u = new com.ippteam.fish.entity.User();
         u.setPassword(pwd);
         u.setRegisterIp(ipInt);
         u.setRegisterTime(now);
@@ -134,7 +133,7 @@ public class UserController extends BaseController {
                 u.setRegisterWay(REG_WAY_PHONE);
             }
         }
-        User user = userService.register(u);
+        com.ippteam.fish.entity.User user = userService.register(u);
         if (user == null) {
             throw new BusinessException(UNKNOWN_ERROR);
         }
@@ -145,9 +144,9 @@ public class UserController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Result update(@RequestBody UserUpdate userUpdate, HttpServletRequest request) throws Exception {
+    public Result update(@RequestBody User userUpdate, HttpServletRequest request) throws Exception {
         Integer id = this.getUserId(request);
-        User user = userService.getUserById(id);
+        com.ippteam.fish.entity.User user = userService.getUserById(id);
         Reflection.objectValueTransfer(user, userUpdate, true);
         user.setUpdateTime(new Date());
         userService.update(user);
@@ -172,17 +171,17 @@ public class UserController extends BaseController {
         }
         authCodeService.delete(authCode);
 
-        User user = userService.getUserByEmail(account);
+        com.ippteam.fish.entity.User user = userService.getUserByEmail(account);
         if (user == null) {
             throw new BusinessException(BusinessStatus.ACCOUNT_NOT_EXIST);
         }
 
         user.setPassword(pwd);
         user.setUpdateTime(new Date());
-        User u = userService.update(user);
+        com.ippteam.fish.entity.User u = userService.update(user);
         if (user == null) {
             throw new BusinessException(UNKNOWN_ERROR);
         }
-        return new Result(0, null, true);
+        return new Result(0, null, u);
     }
 }
