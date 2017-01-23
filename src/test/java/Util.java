@@ -1,8 +1,8 @@
-import com.ippteam.fish.entity.User;
+
 import com.ippteam.fish.pojo.Login;
 import com.ippteam.fish.pojo.RegNew;
 import com.ippteam.fish.pojo.RegisterWay;
-import com.ippteam.fish.pojo.UserUpdate;
+import com.ippteam.fish.pojo.User;
 import com.ippteam.fish.util.*;
 import com.ippteam.fish.util.Random;
 import com.ippteam.fish.util.aes.AES;
@@ -293,7 +293,7 @@ public class Util {
         User user = new User();
         user.setId(1);
         user.setGender("男");
-        UserUpdate userUpdate = new UserUpdate();
+        User userUpdate = new User();
         userUpdate.setNikeName("12");
         userUpdate.setFullName("任贵权");
         userUpdate.setIcon("www.baidu.com");
