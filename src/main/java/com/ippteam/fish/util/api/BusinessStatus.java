@@ -23,6 +23,7 @@ public enum BusinessStatus {
     USERNAME_OR_PASSWORD_INVALID(10027, "username or password is invalid"),
     AUTHCODE_INVALID(10028, "auth code is invalid"),
     ACCOUNT_NOT_EXIST(10029, "account not exist"),
+    OAUTH_FAIL(10030,"oauth fail"),
 
     TOKEN_INVALID(10040, "token is invalid, please login again"),
     PERMISSION_DENIED(10041, "permission denied"),

@@ -17,6 +17,7 @@ public class Final {
     public static final String REG_WAY_EMAIL = "email";
     public static final String REG_WAY_PHONE = "phone";
     public static final String REG_WAY_USERNAME = "username";
+    public static final String REG_WAY_OAUTH = "oauth";
 
     // key
     public static final String REQUEST_ATTRIBUTE_SIGN = "sign";

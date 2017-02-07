@@ -1,5 +1,6 @@
 package com.ippteam.fish.service;
 
+import com.ippteam.fish.entity.Oauth;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.service.util.ReportService;
 
@@ -19,6 +20,10 @@ public interface UserService extends ReportService {
     User getUserByAccount(String account);
 
     User login(String account, String pwd);
+
+    User login(Oauth oauth);
+
+    Oauth oauthBind(Oauth oauth, User user);
 
     User register(User user);
 

@@ -1,5 +1,6 @@
 package com.ippteam.fish.service;
 
+import com.ippteam.fish.dao.OauthMapper;
 import com.ippteam.fish.dao.UserMapper;
 import com.ippteam.fish.entity.*;
 import com.ippteam.fish.entity.User;
@@ -23,6 +24,8 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userDao;
+    @Autowired
+    private OauthMapper oauthDao;
 
     public User getUserById(Integer id) {
         return userDao.selectByPrimaryKey(id);
@@ -71,8 +74,40 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
         return user;
     }
 
+    public User login(Oauth oauth) {
+        Oauth o = oauthByOauthId(oauth.getOauthId());
+        if (o == null) {
+            User u = new User();
+            u.setRegisterWay(REG_WAY_OAUTH);
+            User user = register(u);
+            if (user == null) return null;
+            oauthBind(oauth, user);
+            return user;
+        }
+        return getUserById(o.getUid());
+    }
+
+    public Oauth oauthByOauthId(String oauthId) {
+        OauthExample oauthExample = new OauthExample();
+        oauthExample.createCriteria().andOauthIdEqualTo(oauthId);
+        List<Oauth> oauths = oauthDao.selectByExample(oauthExample);
+        return Fix.list(oauths, 0);
+    }
+
+    public Oauth oauthBind(Oauth oauth, User user) {
+        oauth.setUid(user.getId());
+        oauthDao.insert(oauth);
+
+        OauthExample oauthExample = new OauthExample();
+        oauthExample.createCriteria().
+                andOauthIdEqualTo(oauth.getOauthId()).
+                andUidEqualTo(user.getId());
+        List<Oauth> oauths = oauthDao.selectByExample(oauthExample);
+        return Fix.list(oauths, 0);
+    }
+
     public User register(User user) {
-        String account;
+        String account = null;
         String regWay = user.getRegisterWay();
 
         if (REG_WAY_USERNAME.equals(regWay)) {
@@ -87,13 +122,19 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
             account = user.getPhone();
             user.setUserName(null);
             user.setEmail(null);
+        } else if (REG_WAY_OAUTH.equals(regWay)) {
+            user.setUserName(null);
+            user.setPhone(null);
+            user.setEmail(null);
         } else {
             return null;
         }
 
-        // 验证是否已经被注册
-        if (this.getUserByAccount(account) != null) {
-            return null;
+        // 验证是否已经被注册(用户名、邮箱、手机号注册时)
+        if (!REG_WAY_OAUTH.equals(regWay)) {
+            if (this.getUserByAccount(account) != null) {
+                return null;
+            }
         }
 
         user.setManager(false);
@@ -102,7 +143,7 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
         if (row <= 0) {
             return null;
         }
-        return this.getUserByAccount(account);
+        return user;
     }
 
     public User update(User user) {

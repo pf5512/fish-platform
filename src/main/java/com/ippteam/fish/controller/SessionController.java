@@ -1,12 +1,12 @@
 package com.ippteam.fish.controller;
 
+import com.ippteam.fish.entity.Oauth;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.pojo.Login;
 import com.ippteam.fish.util.Verify;
 import com.ippteam.fish.util.api.BusinessStatus;
 import com.ippteam.fish.util.api.pojo.Result;
 import com.ippteam.fish.util.api.exception.*;
-import com.ippteam.fish.util.api.pojo.Sign;
 import com.ippteam.fish.util.api.version.ApiVersion;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,4 +46,21 @@ public class SessionController extends BaseController {
         }
         return new Result(0, null, token);
     }
+
+    @ApiVersion(1)
+    @ResponseBody
+    @RequestMapping(value = "/oauth", method = RequestMethod.POST)
+    public Result oauth(@RequestBody Oauth oauth, HttpServletRequest request) throws Exception {
+        User user = userService.login(oauth);
+        if (user == null) {
+            throw new BusinessException(BusinessStatus.OAUTH_FAIL);
+        }
+
+        String token = authenticationService.certificate(user.getId().toString());
+        if (!Verify.string(token)) {
+            throw new BusinessException(BusinessStatus.UNKNOWN_ERROR);
+        }
+        return new Result(0, null, token);
+    }
+
 }
