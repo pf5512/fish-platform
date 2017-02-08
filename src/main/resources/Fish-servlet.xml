@@ -4,18 +4,15 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
-       http://mybatis.org/schema/mybatis-spring
-       http://mybatis.org/schema/mybatis-spring.xsd
        http://www.springframework.org/schema/data/mongo
-       http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
-       http://www.springframework.org/schema/context/spring-context-3.0.xsd
-       http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd*">
+       http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <context:annotation-config/>
     <context:component-scan base-package="com.ippteam"/>
@@ -75,6 +72,7 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
     <!--自动扫描mybatis映射器(*mapper.java)-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.ippteam.fish.dao"/>

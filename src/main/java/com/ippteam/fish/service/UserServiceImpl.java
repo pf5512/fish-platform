@@ -9,6 +9,7 @@ import com.ippteam.fish.service.util.ReportType;
 import com.ippteam.fish.util.Fix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -74,13 +75,13 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
         return user;
     }
 
+    @Transactional
     public User login(Oauth oauth) {
         Oauth o = oauthByOauthId(oauth.getOauthId());
         if (o == null) {
             User u = new User();
             u.setRegisterWay(REG_WAY_OAUTH);
             User user = register(u);
-            if (user == null) return null;
             oauthBind(oauth, user);
             return user;
         }
