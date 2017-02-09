@@ -37,7 +37,7 @@ public class MomentController extends BaseController {
     @RequestMapping("/{id}")
     public Result moment(@PathVariable(value = "id") String id) throws Exception {
         try {
-            com.ippteam.fish.entity.nosql.mongodb.Moment m = momentService.getMoment(id);
+            com.ippteam.fish.entity.nosql.mongodb.Moment m = momentService.moment(id);
             com.ippteam.fish.entity.User u = userService.getUserById(new Integer(m.getPublisher()));
             Moment moment = new Moment();
             Reflection.objectValueTransfer(moment, m, true);
@@ -65,8 +65,8 @@ public class MomentController extends BaseController {
     @ApiVersion(1)
     @ResponseBody
     @RequestMapping("/moments")
-    public Result moments(@RequestParam double longitude, @RequestParam double latitude) throws Exception {
-        List<com.ippteam.fish.entity.nosql.mongodb.Moment> moments = momentService.getMoments(longitude, latitude);
+    public Result moments(@RequestParam double longitude, @RequestParam double latitude, @RequestParam(defaultValue = "0") int page) throws Exception {
+        List<com.ippteam.fish.entity.nosql.mongodb.Moment> moments = momentService.moments(longitude, latitude, page);
         List<Moment> momentPjs = new ArrayList<Moment>();
         for (com.ippteam.fish.entity.nosql.mongodb.Moment moment : moments) {
             Moment momentPj = new Moment();
@@ -91,7 +91,7 @@ public class MomentController extends BaseController {
         moment.setDate(new Date());
         com.ippteam.fish.entity.nosql.mongodb.Moment m = new com.ippteam.fish.entity.nosql.mongodb.Moment();
         Reflection.objectValueTransfer(m, moment, true);
-        momentService.addMoment(m);
+        momentService.add(m);
         return new Result(0, null, true);
     }
 

@@ -21,24 +21,24 @@ public class MomentServiceImpl extends ReportServiceImpl implements ReportServic
     @Autowired
     MomentDao momentDao;
 
-    public void addMoment(Moment moment) {
+    public void add(Moment moment) {
         momentDao.insert(moment);
+    }
+
+    public Moment moment(String id) {
+        return momentDao.findById(id);
+    }
+
+    public List<Moment> moments(final Double longitude, final Double latitude, Integer page) throws Exception {
+        return momentDao.getMoments(longitude, latitude, page);
     }
 
     public int like(String id) {
         return momentDao.addLike(id);
     }
 
-    public List<Comment> addComment(String id, Comment comment) {
-        return momentDao.addComment(id, comment);
-    }
-
-    public Moment getMoment(String id) {
-        return momentDao.findById(id);
-    }
-
-    public List<Moment> getMoments(final double longitude, final double latitude) throws Exception {
-        return momentDao.getMoments(longitude, latitude);
+    public List<Comment> addComment(String momentId, Comment comment) {
+        return momentDao.addComment(momentId, comment);
     }
 
     public void banned(String id) {
