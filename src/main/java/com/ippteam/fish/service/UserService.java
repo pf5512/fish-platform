@@ -4,6 +4,8 @@ import com.ippteam.fish.entity.Oauth;
 import com.ippteam.fish.entity.User;
 import com.ippteam.fish.service.util.ReportService;
 
+import java.util.Map;
+
 /**
  * Created by pactera on 16/10/24.
  */
@@ -21,7 +23,7 @@ public interface UserService extends ReportService {
 
     User login(String account, String pwd);
 
-    User login(Oauth oauth);
+    Map login(Oauth oauth);
 
     Oauth oauthBind(Oauth oauth, User user);
 

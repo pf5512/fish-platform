@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.ippteam.fish.util.Final.*;
 
@@ -76,16 +78,20 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
     }
 
     @Transactional
-    public User login(Oauth oauth) {
+    public Map login(Oauth oauth) {
         Oauth o = oauthByOauthId(oauth.getOauthId());
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("isNew", false);
         if (o == null) {
             User u = new User();
             u.setRegisterWay(REG_WAY_OAUTH);
             User user = register(u);
             oauthBind(oauth, user);
-            return user;
+            map.put("isNew", true);
+            map.put("user", user);
         }
-        return getUserById(o.getUid());
+        map.put("user", getUserById(o.getUid()));
+        return map;
     }
 
     public Oauth oauthByOauthId(String oauthId) {

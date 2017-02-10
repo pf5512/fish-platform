@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.ippteam.fish.util.Final.*;
 
 /**
@@ -51,7 +54,8 @@ public class SessionController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/oauth", method = RequestMethod.POST)
     public Result oauth(@RequestBody Oauth oauth, HttpServletRequest request) throws Exception {
-        User user = userService.login(oauth);
+        Map map = userService.login(oauth);
+        User user = (User) map.get("user");
         if (user == null) {
             throw new BusinessException(BusinessStatus.OAUTH_FAIL);
         }
@@ -60,7 +64,10 @@ public class SessionController extends BaseController {
         if (!Verify.string(token)) {
             throw new BusinessException(BusinessStatus.UNKNOWN_ERROR);
         }
-        return new Result(0, null, token);
+        Map map1 = new HashMap();
+        map1.put("isNew", map.get("isNew"));
+        map1.put("token", token);
+        return new Result(0, null, map1);
     }
 
 }
