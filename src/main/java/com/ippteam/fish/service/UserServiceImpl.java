@@ -89,6 +89,7 @@ public class UserServiceImpl extends ReportServiceImpl implements UserService {
             oauthBind(oauth, user);
             map.put("isNew", true);
             map.put("user", user);
+            return map;
         }
         map.put("user", getUserById(o.getUid()));
         return map;

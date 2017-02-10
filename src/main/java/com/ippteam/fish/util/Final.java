@@ -12,6 +12,7 @@ public class Final {
     public static final String NO_NEED_AUTH_URI_WEATHER = "weather";
     public static final String NO_NEED_AUTH_URI_AUTHCODE_EMAIL = "authcode/email";
     public static final String NO_NEED_AUTH_URI_MOMENT_MOMENTS = "/moment/moments";
+    public static final String NO_NEED_AUTH_URI_SESSION_OAUTH = "/session/oauth";
 
     // 注册方式
     public static final String REG_WAY_EMAIL = "email";
