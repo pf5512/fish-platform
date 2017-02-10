@@ -7,6 +7,8 @@ import com.ippteam.fish.util.JSON;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.CommandResult;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
@@ -45,27 +47,9 @@ public class MomentDao extends MongoBaseDao<Moment> {
         mongoTemplate.upsert(query, update, Moment.class);
     }
 
-    public List<Moment> getMoments(final double longitude, final double latitude) throws Exception {
-        String command = String.format("{geoNear:\"moment\",near:[%f,%f],spherical:true,distanceMultiplier: 3963.2}", longitude, latitude);
-        CommandResult commandResult = mongoTemplate.executeCommand(command);
-        List<Moment> moments = new ArrayList<Moment>();
-        if (commandResult.ok()) {
-            Object results = commandResult.get("results");
-            if (results instanceof BasicDBList) {
-                BasicDBList resultList = (BasicDBList) results;
-                for (Object obj : resultList) {
-                    if (obj instanceof BasicDBObject) {
-                        BasicDBObject basicDBObject = (BasicDBObject) obj;
-                        Moment moment = JSON.parse(basicDBObject.get("obj"), Moment.class);
-                        if (moment.isDisplay()) {
-                            moment.setDistance((Double) basicDBObject.get("dis"));
-                            moments.add(moment);
-                        }
-                    }
-                }
-            }
-        }
-        return moments;
+    public List<Moment> getMoments(final Double longitude, final Double latitude, Integer page) throws Exception {
+        Query query = new Query().with(new Sort(new Sort.Order(Sort.Direction.DESC, "date"))).skip(page * 30).limit(30);
+        return this.mongoTemplate.find(query, Moment.class);
     }
 
     public int addLike(String id) {
